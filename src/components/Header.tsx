@@ -1,10 +1,13 @@
 import { Link } from "@tanstack/react-router";
 import { Sparkles, Menu, X } from "lucide-react";
 import { useState } from "react";
+import { CityPicker } from "./CityPicker";
 
 const navItems: { to: string; label: string; exact?: boolean }[] = [
   { to: "/", label: "Découvrir", exact: true },
   { to: "/activities", label: "Activités" },
+  { to: "/nearby", label: "Près de toi" },
+  { to: "/itineraries", label: "Itinéraires" },
   { to: "/flash-deals", label: "Flash Deals" },
   { to: "/lightning", label: "Lightning" },
   { to: "/weather", label: "Météo" },
@@ -42,6 +45,7 @@ export function Header() {
         </nav>
 
         <div className="flex items-center gap-2">
+          <CityPicker />
           <Link
             to="/activities"
             className="hidden rounded-full bg-primary px-5 py-2 text-sm font-semibold text-primary-foreground shadow-soft transition hover:opacity-90 md:inline-flex"
