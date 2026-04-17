@@ -5,7 +5,6 @@ import { FiltersProvider } from "@/contexts/FiltersContext";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { ChatbotWidget } from "@/components/ChatbotWidget";
-import { CityConfirmBanner } from "@/components/CityConfirmBanner";
 
 function NotFoundComponent() {
   return (
@@ -32,10 +31,14 @@ export const Route = createRootRoute({
       { title: "LoisirBooking — Réservez vos loisirs au Maroc" },
       { name: "description", content: "La super-app marocaine pour découvrir et réserver les meilleures activités de loisirs : aventure, bien-être, culture, gastronomie." },
       { name: "author", content: "LoisirBooking" },
-      { property: "og:title", content: "LoisirBooking — Loisirs au Maroc" },
-      { property: "og:description", content: "Découvrez, réservez et vivez les loisirs locaux au Maroc." },
+      { property: "og:title", content: "LoisirBooking — Réservez vos loisirs au Maroc" },
+      { property: "og:description", content: "La super-app marocaine pour découvrir et réserver les meilleures activités de loisirs : aventure, bien-être, culture, gastronomie." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
+      { name: "twitter:title", content: "LoisirBooking — Réservez vos loisirs au Maroc" },
+      { name: "twitter:description", content: "La super-app marocaine pour découvrir et réserver les meilleures activités de loisirs : aventure, bien-être, culture, gastronomie." },
+      { property: "og:image", content: "https://storage.googleapis.com/gpt-engineer-file-uploads/attachments/og-images/0762b83b-220d-4c13-be72-018bb656a90b" },
+      { name: "twitter:image", content: "https://storage.googleapis.com/gpt-engineer-file-uploads/attachments/og-images/0762b83b-220d-4c13-be72-018bb656a90b" },
     ],
     links: [{ rel: "stylesheet", href: appCss }],
   }),
@@ -63,7 +66,6 @@ function RootComponent() {
     <FiltersProvider>
       <div className="flex min-h-screen flex-col">
         <Header />
-        <CityConfirmBanner />
         <main className="flex-1">
           <Outlet />
         </main>
