@@ -10,7 +10,7 @@ export function FilterBar() {
   const [openCities, setOpenCities] = useState(false);
   const [openBudget, setOpenBudget] = useState(false);
 
-  const { weather } = useWeather(f.detectedCity?.lat, f.detectedCity?.lon);
+  const { weather } = useWeather(f.activeCity?.lat, f.activeCity?.lon);
 
   const toggleCity = (id: string) => {
     f.setSelectedCities(
@@ -35,7 +35,7 @@ export function FilterBar() {
         <div className="flex items-start gap-3 rounded-2xl border border-destructive/20 bg-destructive/5 p-4 text-sm text-destructive">
           <AlertTriangle className="mt-0.5 h-5 w-5 flex-shrink-0" />
           <div>
-            <strong>Alerte météo à {f.detectedCity?.name} :</strong>{" "}
+            <strong>Alerte météo à {f.activeCity?.name} :</strong>{" "}
             {weather.description.toLowerCase()} {weather.emoji} ({weather.tempC}°C, vent {weather.windKmh} km/h).
             Les activités en extérieur peuvent être déconseillées — privilégiez les expériences en intérieur.
           </div>
@@ -69,9 +69,9 @@ export function FilterBar() {
             </button>
             {openCities && (
               <div className="absolute left-0 right-0 top-full z-30 mt-2 max-h-80 overflow-auto rounded-2xl border border-border bg-popover p-2 shadow-elegant md:w-72">
-                {f.detectedCity && (
+                {f.activeCity && (
                   <div className="mb-2 rounded-xl bg-mint/10 px-3 py-2 text-xs text-muted-foreground">
-                    📍 Position détectée : <strong className="text-foreground">{f.detectedCity.name}</strong>
+                    📍 {f.manualCity ? "Ville sélectionnée" : "Position détectée"} : <strong className="text-foreground">{f.activeCity.name}</strong>
                   </div>
                 )}
                 <button
@@ -172,11 +172,11 @@ export function FilterBar() {
         )}
 
         {/* Weather badge */}
-        {weather && f.detectedCity && (
+        {weather && f.activeCity && (
           <div className="mt-3 flex items-center gap-2 text-xs text-muted-foreground">
             <span className="text-base">{weather.emoji}</span>
             <span>
-              {f.detectedCity.name} · {weather.tempC}°C · {weather.description} · vent {weather.windKmh} km/h
+              {f.activeCity.name} · {weather.tempC}°C · {weather.description} · vent {weather.windKmh} km/h
             </span>
             <span className={`ml-auto rounded-full px-2 py-0.5 text-[11px] font-semibold ${weather.isOutdoorFriendly ? "bg-mint/15 text-foreground" : "bg-destructive/15 text-destructive"}`}>
               {weather.isOutdoorFriendly ? "Idéal pour l'extérieur" : "Préférez l'intérieur"}
