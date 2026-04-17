@@ -5,9 +5,16 @@ import cooking from "@/assets/act-cooking.jpg";
 import balloon from "@/assets/act-balloon.jpg";
 import quad from "@/assets/act-quad.jpg";
 import mosque from "@/assets/act-mosque.jpg";
-import pottery from "@/assets/act-pottery.jpg";
+import pottery from "@/assets/act-pottery-zellige.jpg";
 import yacht from "@/assets/act-yacht.jpg";
 import chefchaouen from "@/assets/hero-chefchaouen.jpg";
+import medinaSouk from "@/assets/act-medina-souk.jpg";
+import escapeGame from "@/assets/act-escape-game.jpg";
+import calligraphy from "@/assets/act-calligraphy.jpg";
+import tannery from "@/assets/act-tannery.jpg";
+import zellige from "@/assets/act-zellige.jpg";
+import indigo from "@/assets/act-indigo.jpg";
+import thuya from "@/assets/act-thuya.jpg";
 
 export type PriceTier = "budget" | "standard" | "premium" | "luxe";
 export type WeatherSensitivity = "outdoor" | "indoor" | "any";
@@ -33,6 +40,7 @@ export type Activity = {
 
 const img = {
   sahara, surf, hammam, cooking, balloon, quad, mosque, pottery, yacht, chefchaouen,
+  medinaSouk, escapeGame, calligraphy, tannery, zellige, indigo, thuya,
 };
 
 const tierFromPrice = (p: number): PriceTier =>
