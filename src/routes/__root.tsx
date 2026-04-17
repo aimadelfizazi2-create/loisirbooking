@@ -1,10 +1,13 @@
-import { Outlet, createRootRoute, HeadContent, Scripts } from "@tanstack/react-router";
+import { Outlet, createRootRoute, HeadContent, Scripts, useLocation } from "@tanstack/react-router";
 
 import appCss from "../styles.css?url";
 import { FiltersProvider } from "@/contexts/FiltersContext";
+import { AuthProvider } from "@/contexts/AuthContext";
+import { AuthGate } from "@/components/AuthGate";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { ChatbotWidget } from "@/components/ChatbotWidget";
+import { CityConfirmBanner } from "@/components/CityConfirmBanner";
 
 function NotFoundComponent() {
   return (
@@ -62,16 +65,24 @@ function RootShell({ children }: { children: React.ReactNode }) {
 }
 
 function RootComponent() {
+  const location = useLocation();
+  const isAuthRoute = location.pathname.startsWith("/auth");
+
   return (
-    <FiltersProvider>
-      <div className="flex min-h-screen flex-col">
-        <Header />
-        <main className="flex-1">
-          <Outlet />
-        </main>
-        <Footer />
-        <ChatbotWidget />
-      </div>
-    </FiltersProvider>
+    <AuthProvider>
+      <FiltersProvider>
+        <AuthGate>
+          <div className="flex min-h-screen flex-col">
+            {!isAuthRoute && <Header />}
+            {!isAuthRoute && <CityConfirmBanner />}
+            <main className="flex-1">
+              <Outlet />
+            </main>
+            {!isAuthRoute && <Footer />}
+            {!isAuthRoute && <ChatbotWidget />}
+          </div>
+        </AuthGate>
+      </FiltersProvider>
+    </AuthProvider>
   );
 }
