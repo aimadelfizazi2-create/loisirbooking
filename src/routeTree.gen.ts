@@ -12,7 +12,9 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as WeatherRouteImport } from './routes/weather'
 import { Route as ProfileRouteImport } from './routes/profile'
 import { Route as ProRouteImport } from './routes/pro'
+import { Route as NearbyRouteImport } from './routes/nearby'
 import { Route as LightningRouteImport } from './routes/lightning'
+import { Route as ItinerariesRouteImport } from './routes/itineraries'
 import { Route as FlashDealsRouteImport } from './routes/flash-deals'
 import { Route as ActivitiesRouteImport } from './routes/activities'
 import { Route as AboutRouteImport } from './routes/about'
@@ -34,9 +36,19 @@ const ProRoute = ProRouteImport.update({
   path: '/pro',
   getParentRoute: () => rootRouteImport,
 } as any)
+const NearbyRoute = NearbyRouteImport.update({
+  id: '/nearby',
+  path: '/nearby',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const LightningRoute = LightningRouteImport.update({
   id: '/lightning',
   path: '/lightning',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ItinerariesRoute = ItinerariesRouteImport.update({
+  id: '/itineraries',
+  path: '/itineraries',
   getParentRoute: () => rootRouteImport,
 } as any)
 const FlashDealsRoute = FlashDealsRouteImport.update({
@@ -70,7 +82,9 @@ export interface FileRoutesByFullPath {
   '/about': typeof AboutRoute
   '/activities': typeof ActivitiesRoute
   '/flash-deals': typeof FlashDealsRoute
+  '/itineraries': typeof ItinerariesRoute
   '/lightning': typeof LightningRoute
+  '/nearby': typeof NearbyRoute
   '/pro': typeof ProRoute
   '/profile': typeof ProfileRoute
   '/weather': typeof WeatherRoute
@@ -81,7 +95,9 @@ export interface FileRoutesByTo {
   '/about': typeof AboutRoute
   '/activities': typeof ActivitiesRoute
   '/flash-deals': typeof FlashDealsRoute
+  '/itineraries': typeof ItinerariesRoute
   '/lightning': typeof LightningRoute
+  '/nearby': typeof NearbyRoute
   '/pro': typeof ProRoute
   '/profile': typeof ProfileRoute
   '/weather': typeof WeatherRoute
@@ -93,7 +109,9 @@ export interface FileRoutesById {
   '/about': typeof AboutRoute
   '/activities': typeof ActivitiesRoute
   '/flash-deals': typeof FlashDealsRoute
+  '/itineraries': typeof ItinerariesRoute
   '/lightning': typeof LightningRoute
+  '/nearby': typeof NearbyRoute
   '/pro': typeof ProRoute
   '/profile': typeof ProfileRoute
   '/weather': typeof WeatherRoute
@@ -106,7 +124,9 @@ export interface FileRouteTypes {
     | '/about'
     | '/activities'
     | '/flash-deals'
+    | '/itineraries'
     | '/lightning'
+    | '/nearby'
     | '/pro'
     | '/profile'
     | '/weather'
@@ -117,7 +137,9 @@ export interface FileRouteTypes {
     | '/about'
     | '/activities'
     | '/flash-deals'
+    | '/itineraries'
     | '/lightning'
+    | '/nearby'
     | '/pro'
     | '/profile'
     | '/weather'
@@ -128,7 +150,9 @@ export interface FileRouteTypes {
     | '/about'
     | '/activities'
     | '/flash-deals'
+    | '/itineraries'
     | '/lightning'
+    | '/nearby'
     | '/pro'
     | '/profile'
     | '/weather'
@@ -140,7 +164,9 @@ export interface RootRouteChildren {
   AboutRoute: typeof AboutRoute
   ActivitiesRoute: typeof ActivitiesRoute
   FlashDealsRoute: typeof FlashDealsRoute
+  ItinerariesRoute: typeof ItinerariesRoute
   LightningRoute: typeof LightningRoute
+  NearbyRoute: typeof NearbyRoute
   ProRoute: typeof ProRoute
   ProfileRoute: typeof ProfileRoute
   WeatherRoute: typeof WeatherRoute
@@ -170,11 +196,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ProRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/nearby': {
+      id: '/nearby'
+      path: '/nearby'
+      fullPath: '/nearby'
+      preLoaderRoute: typeof NearbyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/lightning': {
       id: '/lightning'
       path: '/lightning'
       fullPath: '/lightning'
       preLoaderRoute: typeof LightningRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/itineraries': {
+      id: '/itineraries'
+      path: '/itineraries'
+      fullPath: '/itineraries'
+      preLoaderRoute: typeof ItinerariesRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/flash-deals': {
@@ -220,7 +260,9 @@ const rootRouteChildren: RootRouteChildren = {
   AboutRoute: AboutRoute,
   ActivitiesRoute: ActivitiesRoute,
   FlashDealsRoute: FlashDealsRoute,
+  ItinerariesRoute: ItinerariesRoute,
   LightningRoute: LightningRoute,
+  NearbyRoute: NearbyRoute,
   ProRoute: ProRoute,
   ProfileRoute: ProfileRoute,
   WeatherRoute: WeatherRoute,

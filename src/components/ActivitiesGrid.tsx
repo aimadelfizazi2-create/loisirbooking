@@ -10,7 +10,7 @@ const tierMinPrice = { budget: 0, standard: 200, premium: 600, luxe: 1500 } as c
 
 export function ActivitiesGrid({ limit }: { limit?: number }) {
   const f = useFilters();
-  const { weather } = useWeather(f.detectedCity?.lat, f.detectedCity?.lon);
+  const { weather } = useWeather(f.activeCity?.lat, f.activeCity?.lon);
 
   const list = useMemo(() => {
     let res = ACTIVITIES.filter((a) => {

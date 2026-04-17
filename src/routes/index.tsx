@@ -3,7 +3,8 @@ import heroImg from "@/assets/hero-chefchaouen.jpg";
 import { FilterBar } from "@/components/FilterBar";
 import { MoodPicker } from "@/components/MoodPicker";
 import { ActivitiesGrid } from "@/components/ActivitiesGrid";
-import { ArrowRight, MapPin, Sparkles, Zap, Users, Shield } from "lucide-react";
+import { GoldenHourWidget } from "@/components/GoldenHourWidget";
+import { ArrowRight, Sparkles, Zap, Users, Shield } from "lucide-react";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -67,6 +68,9 @@ function HomePage() {
       <section className="relative z-10 mx-auto -mt-12 max-w-7xl px-4 md:px-8">
         <FilterBar />
       </section>
+
+      {/* Golden hour / time-aware suggestions */}
+      <GoldenHourWidget />
 
       {/* Mood section */}
       <section className="mx-auto max-w-7xl px-4 py-12 md:px-8 md:py-16">

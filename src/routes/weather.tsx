@@ -36,7 +36,7 @@ function WeatherPage() {
         </p>
       </div>
 
-      {f.detectedCity && <PrimaryCityWeather cityId={f.detectedCity.id} />}
+      {f.activeCity && <PrimaryCityWeather cityId={f.activeCity.id} />}
 
       <h2 className="mt-12 mb-6 font-display text-2xl font-bold">Toutes les villes</h2>
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">

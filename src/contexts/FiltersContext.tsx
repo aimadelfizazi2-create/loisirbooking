@@ -2,18 +2,23 @@ import { createContext, useContext, useEffect, useMemo, useState, type ReactNode
 import { CITIES, findNearestCity, type City } from "@/data/cities";
 import type { PriceTier } from "@/data/activities";
 
+const STORAGE_KEY = "lb.activeCity";
+
 type FiltersState = {
   selectedCities: string[]; // city ids; empty = all
   budget: PriceTier | "all";
   groupSize: number;
   moods: string[];
   search: string;
-  detectedCity: City | null;
+  detectedCity: City | null; // geo-detected
+  manualCity: City | null;   // user-chosen override
+  activeCity: City | null;   // manual ?? detected
   setSelectedCities: (v: string[]) => void;
   setBudget: (v: PriceTier | "all") => void;
   setGroupSize: (n: number) => void;
   setMoods: (v: string[]) => void;
   setSearch: (s: string) => void;
+  setManualCity: (cityId: string | null) => void;
 };
 
 const Ctx = createContext<FiltersState | null>(null);
@@ -25,36 +30,71 @@ export function FiltersProvider({ children }: { children: ReactNode }) {
   const [moods, setMoods] = useState<string[]>([]);
   const [search, setSearch] = useState("");
   const [detectedCity, setDetectedCity] = useState<City | null>(null);
+  const [manualCity, setManualCityState] = useState<City | null>(null);
 
-  // Geolocation auto-detect
+  // Load persisted manual city
   useEffect(() => {
+    if (typeof window === "undefined") return;
+    const stored = localStorage.getItem(STORAGE_KEY);
+    if (stored) {
+      const city = CITIES.find((c) => c.id === stored);
+      if (city) {
+        setManualCityState(city);
+        setSelectedCities([city.id]);
+      }
+    }
+  }, []);
+
+  const setManualCity = (cityId: string | null) => {
+    if (typeof window !== "undefined") {
+      if (cityId) localStorage.setItem(STORAGE_KEY, cityId);
+      else localStorage.removeItem(STORAGE_KEY);
+    }
+    if (!cityId) {
+      setManualCityState(null);
+      if (detectedCity) setSelectedCities([detectedCity.id]);
+      return;
+    }
+    const city = CITIES.find((c) => c.id === cityId) ?? null;
+    setManualCityState(city);
+    if (city) setSelectedCities([city.id]);
+  };
+
+  // Geolocation auto-detect (only when no manual override)
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    if (localStorage.getItem(STORAGE_KEY)) return; // user has manual choice
+
     if (!("geolocation" in navigator)) {
       const fallback = CITIES.find((c) => c.id === "casablanca")!;
       setDetectedCity(fallback);
-      setSelectedCities([fallback.id]);
+      setSelectedCities((prev) => (prev.length === 0 ? [fallback.id] : prev));
       return;
     }
     navigator.geolocation.getCurrentPosition(
       (pos) => {
         const c = findNearestCity(pos.coords.latitude, pos.coords.longitude);
         setDetectedCity(c);
-        setSelectedCities([c.id]);
+        setSelectedCities((prev) => (prev.length === 0 ? [c.id] : prev));
       },
       () => {
         const fallback = CITIES.find((c) => c.id === "casablanca")!;
         setDetectedCity(fallback);
-        setSelectedCities([fallback.id]);
+        setSelectedCities((prev) => (prev.length === 0 ? [fallback.id] : prev));
       },
       { timeout: 5000 },
     );
   }, []);
 
+  const activeCity = manualCity ?? detectedCity;
+
   const value = useMemo<FiltersState>(
     () => ({
-      selectedCities, budget, groupSize, moods, search, detectedCity,
-      setSelectedCities, setBudget, setGroupSize, setMoods, setSearch,
+      selectedCities, budget, groupSize, moods, search,
+      detectedCity, manualCity, activeCity,
+      setSelectedCities, setBudget, setGroupSize, setMoods, setSearch, setManualCity,
     }),
-    [selectedCities, budget, groupSize, moods, search, detectedCity],
+    [selectedCities, budget, groupSize, moods, search, detectedCity, manualCity, activeCity],
   );
 
   return <Ctx.Provider value={value}>{children}</Ctx.Provider>;
