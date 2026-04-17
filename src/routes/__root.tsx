@@ -5,6 +5,7 @@ import { FiltersProvider } from "@/contexts/FiltersContext";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { ChatbotWidget } from "@/components/ChatbotWidget";
+import { CityConfirmBanner } from "@/components/CityConfirmBanner";
 
 function NotFoundComponent() {
   return (
@@ -62,6 +63,7 @@ function RootComponent() {
     <FiltersProvider>
       <div className="flex min-h-screen flex-col">
         <Header />
+        <CityConfirmBanner />
         <main className="flex-1">
           <Outlet />
         </main>
