@@ -54,7 +54,7 @@ export const ITINERARIES: Itinerary[] = [
     highlights: ["Vallée du Drâa", "Studios cinéma Atlas", "Dunes Erg Chebbi", "Nuit berbère"],
     best: "Octobre — Avril",
     pace: "Intense",
-    activityIds: ["mrz-1", "mrz-2", "ouz-1"],
+    activityIds: ["mrz-1", "mrz-2", "mrz-3"],
   },
   {
     id: "blue-north",
