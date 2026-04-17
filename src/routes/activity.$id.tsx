@@ -63,7 +63,7 @@ function ActivityDetail() {
           </h1>
 
           <div className="mt-4 flex flex-wrap gap-2">
-            {activity.moods.map((m) => (
+            {activity.moods.map((m: string) => (
               <span key={m} className="rounded-full bg-primary/10 px-3 py-1 text-sm font-medium text-primary">{m}</span>
             ))}
           </div>
