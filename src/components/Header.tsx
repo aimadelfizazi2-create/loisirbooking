@@ -2,7 +2,7 @@ import { Link } from "@tanstack/react-router";
 import { Sparkles, Menu, X } from "lucide-react";
 import { useState } from "react";
 
-const navItems = [
+const navItems: { to: string; label: string; exact?: boolean }[] = [
   { to: "/", label: "Découvrir", exact: true },
   { to: "/activities", label: "Activités" },
   { to: "/flash-deals", label: "Flash Deals" },
@@ -10,7 +10,7 @@ const navItems = [
   { to: "/weather", label: "Météo" },
   { to: "/profile", label: "Passeport" },
   { to: "/pro", label: "Pro" },
-] as const;
+];
 
 export function Header() {
   const [open, setOpen] = useState(false);
