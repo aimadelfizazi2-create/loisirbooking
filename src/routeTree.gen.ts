@@ -11,11 +11,12 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as WeatherRouteImport } from './routes/weather'
 import { Route as ProfileRouteImport } from './routes/profile'
-import { Route as ProRouteImport } from './routes/pro'
+import { Route as PartnerRouteImport } from './routes/partner'
 import { Route as NearbyRouteImport } from './routes/nearby'
 import { Route as LightningRouteImport } from './routes/lightning'
 import { Route as ItinerariesRouteImport } from './routes/itineraries'
 import { Route as FlashDealsRouteImport } from './routes/flash-deals'
+import { Route as AuthRouteImport } from './routes/auth'
 import { Route as ActivitiesRouteImport } from './routes/activities'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
@@ -31,9 +32,9 @@ const ProfileRoute = ProfileRouteImport.update({
   path: '/profile',
   getParentRoute: () => rootRouteImport,
 } as any)
-const ProRoute = ProRouteImport.update({
-  id: '/pro',
-  path: '/pro',
+const PartnerRoute = PartnerRouteImport.update({
+  id: '/partner',
+  path: '/partner',
   getParentRoute: () => rootRouteImport,
 } as any)
 const NearbyRoute = NearbyRouteImport.update({
@@ -54,6 +55,11 @@ const ItinerariesRoute = ItinerariesRouteImport.update({
 const FlashDealsRoute = FlashDealsRouteImport.update({
   id: '/flash-deals',
   path: '/flash-deals',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthRoute = AuthRouteImport.update({
+  id: '/auth',
+  path: '/auth',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ActivitiesRoute = ActivitiesRouteImport.update({
@@ -81,11 +87,12 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
   '/activities': typeof ActivitiesRoute
+  '/auth': typeof AuthRoute
   '/flash-deals': typeof FlashDealsRoute
   '/itineraries': typeof ItinerariesRoute
   '/lightning': typeof LightningRoute
   '/nearby': typeof NearbyRoute
-  '/pro': typeof ProRoute
+  '/partner': typeof PartnerRoute
   '/profile': typeof ProfileRoute
   '/weather': typeof WeatherRoute
   '/activity/$id': typeof ActivityIdRoute
@@ -94,11 +101,12 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
   '/activities': typeof ActivitiesRoute
+  '/auth': typeof AuthRoute
   '/flash-deals': typeof FlashDealsRoute
   '/itineraries': typeof ItinerariesRoute
   '/lightning': typeof LightningRoute
   '/nearby': typeof NearbyRoute
-  '/pro': typeof ProRoute
+  '/partner': typeof PartnerRoute
   '/profile': typeof ProfileRoute
   '/weather': typeof WeatherRoute
   '/activity/$id': typeof ActivityIdRoute
@@ -108,11 +116,12 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
   '/activities': typeof ActivitiesRoute
+  '/auth': typeof AuthRoute
   '/flash-deals': typeof FlashDealsRoute
   '/itineraries': typeof ItinerariesRoute
   '/lightning': typeof LightningRoute
   '/nearby': typeof NearbyRoute
-  '/pro': typeof ProRoute
+  '/partner': typeof PartnerRoute
   '/profile': typeof ProfileRoute
   '/weather': typeof WeatherRoute
   '/activity/$id': typeof ActivityIdRoute
@@ -123,11 +132,12 @@ export interface FileRouteTypes {
     | '/'
     | '/about'
     | '/activities'
+    | '/auth'
     | '/flash-deals'
     | '/itineraries'
     | '/lightning'
     | '/nearby'
-    | '/pro'
+    | '/partner'
     | '/profile'
     | '/weather'
     | '/activity/$id'
@@ -136,11 +146,12 @@ export interface FileRouteTypes {
     | '/'
     | '/about'
     | '/activities'
+    | '/auth'
     | '/flash-deals'
     | '/itineraries'
     | '/lightning'
     | '/nearby'
-    | '/pro'
+    | '/partner'
     | '/profile'
     | '/weather'
     | '/activity/$id'
@@ -149,11 +160,12 @@ export interface FileRouteTypes {
     | '/'
     | '/about'
     | '/activities'
+    | '/auth'
     | '/flash-deals'
     | '/itineraries'
     | '/lightning'
     | '/nearby'
-    | '/pro'
+    | '/partner'
     | '/profile'
     | '/weather'
     | '/activity/$id'
@@ -163,11 +175,12 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AboutRoute: typeof AboutRoute
   ActivitiesRoute: typeof ActivitiesRoute
+  AuthRoute: typeof AuthRoute
   FlashDealsRoute: typeof FlashDealsRoute
   ItinerariesRoute: typeof ItinerariesRoute
   LightningRoute: typeof LightningRoute
   NearbyRoute: typeof NearbyRoute
-  ProRoute: typeof ProRoute
+  PartnerRoute: typeof PartnerRoute
   ProfileRoute: typeof ProfileRoute
   WeatherRoute: typeof WeatherRoute
   ActivityIdRoute: typeof ActivityIdRoute
@@ -189,11 +202,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ProfileRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/pro': {
-      id: '/pro'
-      path: '/pro'
-      fullPath: '/pro'
-      preLoaderRoute: typeof ProRouteImport
+    '/partner': {
+      id: '/partner'
+      path: '/partner'
+      fullPath: '/partner'
+      preLoaderRoute: typeof PartnerRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/nearby': {
@@ -222,6 +235,13 @@ declare module '@tanstack/react-router' {
       path: '/flash-deals'
       fullPath: '/flash-deals'
       preLoaderRoute: typeof FlashDealsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/auth': {
+      id: '/auth'
+      path: '/auth'
+      fullPath: '/auth'
+      preLoaderRoute: typeof AuthRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/activities': {
@@ -259,11 +279,12 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AboutRoute: AboutRoute,
   ActivitiesRoute: ActivitiesRoute,
+  AuthRoute: AuthRoute,
   FlashDealsRoute: FlashDealsRoute,
   ItinerariesRoute: ItinerariesRoute,
   LightningRoute: LightningRoute,
   NearbyRoute: NearbyRoute,
-  ProRoute: ProRoute,
+  PartnerRoute: PartnerRoute,
   ProfileRoute: ProfileRoute,
   WeatherRoute: WeatherRoute,
   ActivityIdRoute: ActivityIdRoute,

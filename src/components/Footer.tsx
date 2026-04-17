@@ -9,7 +9,7 @@ export function Footer() {
             Loisir<span className="text-primary">Booking</span>
           </h3>
           <p className="mt-3 text-sm text-muted-foreground">
-            La super-app marocaine des loisirs locaux. Découvrez, réservez, vivez.
+            La super-app marocaine des loisirs locaux. Siège social à Tanger.
           </p>
         </div>
         <div>
@@ -21,11 +21,11 @@ export function Footer() {
           </ul>
         </div>
         <div>
-          <h4 className="mb-3 text-sm font-semibold">Prestataires</h4>
+          <h4 className="mb-3 text-sm font-semibold">Partenaires</h4>
           <ul className="space-y-2 text-sm text-muted-foreground">
-            <li><Link to="/pro" className="hover:text-primary">Devenir partenaire</Link></li>
-            <li><Link to="/pro" className="hover:text-primary">Dashboard B2B</Link></li>
-            <li><Link to="/pro" className="hover:text-primary">Flash Deals</Link></li>
+            <li><Link to="/partner" className="hover:text-primary">Devenir partenaire</Link></li>
+            <li><Link to="/partner" className="hover:text-primary">Dashboard B2B</Link></li>
+            <li><Link to="/partner" className="hover:text-primary">Flash Deals</Link></li>
           </ul>
         </div>
         <div>

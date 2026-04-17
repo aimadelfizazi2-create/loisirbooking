@@ -60,28 +60,23 @@ export function FiltersProvider({ children }: { children: ReactNode }) {
     if (city) setSelectedCities([city.id]);
   };
 
-  // Geolocation auto-detect (only when no manual override)
+  // Default city: Tanger (siège social). Geolocation only refines if user allows it.
   useEffect(() => {
     if (typeof window === "undefined") return;
     if (localStorage.getItem(STORAGE_KEY)) return; // user has manual choice
 
-    if (!("geolocation" in navigator)) {
-      const fallback = CITIES.find((c) => c.id === "casablanca")!;
-      setDetectedCity(fallback);
-      setSelectedCities((prev) => (prev.length === 0 ? [fallback.id] : prev));
-      return;
-    }
+    const defaultCity = CITIES.find((c) => c.id === "tanger")!;
+    setDetectedCity(defaultCity);
+    setSelectedCities((prev) => (prev.length === 0 ? [defaultCity.id] : prev));
+
+    if (!("geolocation" in navigator)) return;
     navigator.geolocation.getCurrentPosition(
       (pos) => {
         const c = findNearestCity(pos.coords.latitude, pos.coords.longitude);
         setDetectedCity(c);
-        setSelectedCities((prev) => (prev.length === 0 ? [c.id] : prev));
+        setSelectedCities((prev) => (prev.length <= 1 ? [c.id] : prev));
       },
-      () => {
-        const fallback = CITIES.find((c) => c.id === "casablanca")!;
-        setDetectedCity(fallback);
-        setSelectedCities((prev) => (prev.length === 0 ? [fallback.id] : prev));
-      },
+      () => { /* keep Tanger fallback */ },
       { timeout: 5000 },
     );
   }, []);
