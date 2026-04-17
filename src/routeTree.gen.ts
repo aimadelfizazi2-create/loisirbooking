@@ -11,7 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as WeatherRouteImport } from './routes/weather'
 import { Route as ProfileRouteImport } from './routes/profile'
-import { Route as ProRouteImport } from './routes/pro'
+import { Route as PartnerRouteImport } from './routes/partner'
 import { Route as NearbyRouteImport } from './routes/nearby'
 import { Route as LightningRouteImport } from './routes/lightning'
 import { Route as ItinerariesRouteImport } from './routes/itineraries'
@@ -32,9 +32,9 @@ const ProfileRoute = ProfileRouteImport.update({
   path: '/profile',
   getParentRoute: () => rootRouteImport,
 } as any)
-const ProRoute = ProRouteImport.update({
-  id: '/pro',
-  path: '/pro',
+const PartnerRoute = PartnerRouteImport.update({
+  id: '/partner',
+  path: '/partner',
   getParentRoute: () => rootRouteImport,
 } as any)
 const NearbyRoute = NearbyRouteImport.update({
@@ -92,7 +92,7 @@ export interface FileRoutesByFullPath {
   '/itineraries': typeof ItinerariesRoute
   '/lightning': typeof LightningRoute
   '/nearby': typeof NearbyRoute
-  '/pro': typeof ProRoute
+  '/partner': typeof PartnerRoute
   '/profile': typeof ProfileRoute
   '/weather': typeof WeatherRoute
   '/activity/$id': typeof ActivityIdRoute
@@ -106,7 +106,7 @@ export interface FileRoutesByTo {
   '/itineraries': typeof ItinerariesRoute
   '/lightning': typeof LightningRoute
   '/nearby': typeof NearbyRoute
-  '/pro': typeof ProRoute
+  '/partner': typeof PartnerRoute
   '/profile': typeof ProfileRoute
   '/weather': typeof WeatherRoute
   '/activity/$id': typeof ActivityIdRoute
@@ -121,7 +121,7 @@ export interface FileRoutesById {
   '/itineraries': typeof ItinerariesRoute
   '/lightning': typeof LightningRoute
   '/nearby': typeof NearbyRoute
-  '/pro': typeof ProRoute
+  '/partner': typeof PartnerRoute
   '/profile': typeof ProfileRoute
   '/weather': typeof WeatherRoute
   '/activity/$id': typeof ActivityIdRoute
@@ -137,7 +137,7 @@ export interface FileRouteTypes {
     | '/itineraries'
     | '/lightning'
     | '/nearby'
-    | '/pro'
+    | '/partner'
     | '/profile'
     | '/weather'
     | '/activity/$id'
@@ -151,7 +151,7 @@ export interface FileRouteTypes {
     | '/itineraries'
     | '/lightning'
     | '/nearby'
-    | '/pro'
+    | '/partner'
     | '/profile'
     | '/weather'
     | '/activity/$id'
@@ -165,7 +165,7 @@ export interface FileRouteTypes {
     | '/itineraries'
     | '/lightning'
     | '/nearby'
-    | '/pro'
+    | '/partner'
     | '/profile'
     | '/weather'
     | '/activity/$id'
@@ -180,7 +180,7 @@ export interface RootRouteChildren {
   ItinerariesRoute: typeof ItinerariesRoute
   LightningRoute: typeof LightningRoute
   NearbyRoute: typeof NearbyRoute
-  ProRoute: typeof ProRoute
+  PartnerRoute: typeof PartnerRoute
   ProfileRoute: typeof ProfileRoute
   WeatherRoute: typeof WeatherRoute
   ActivityIdRoute: typeof ActivityIdRoute
@@ -202,11 +202,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ProfileRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/pro': {
-      id: '/pro'
-      path: '/pro'
-      fullPath: '/pro'
-      preLoaderRoute: typeof ProRouteImport
+    '/partner': {
+      id: '/partner'
+      path: '/partner'
+      fullPath: '/partner'
+      preLoaderRoute: typeof PartnerRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/nearby': {
@@ -284,7 +284,7 @@ const rootRouteChildren: RootRouteChildren = {
   ItinerariesRoute: ItinerariesRoute,
   LightningRoute: LightningRoute,
   NearbyRoute: NearbyRoute,
-  ProRoute: ProRoute,
+  PartnerRoute: PartnerRoute,
   ProfileRoute: ProfileRoute,
   WeatherRoute: WeatherRoute,
   ActivityIdRoute: ActivityIdRoute,
@@ -292,3 +292,12 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { createStart } from '@tanstack/react-start'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+  }
+}
