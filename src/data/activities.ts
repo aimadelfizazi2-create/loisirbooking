@@ -5,9 +5,16 @@ import cooking from "@/assets/act-cooking.jpg";
 import balloon from "@/assets/act-balloon.jpg";
 import quad from "@/assets/act-quad.jpg";
 import mosque from "@/assets/act-mosque.jpg";
-import pottery from "@/assets/act-pottery.jpg";
+import pottery from "@/assets/act-pottery-zellige.jpg";
 import yacht from "@/assets/act-yacht.jpg";
 import chefchaouen from "@/assets/hero-chefchaouen.jpg";
+import medinaSouk from "@/assets/act-medina-souk.jpg";
+import escapeGame from "@/assets/act-escape-game.jpg";
+import calligraphy from "@/assets/act-calligraphy.jpg";
+import tannery from "@/assets/act-tannery.jpg";
+import zellige from "@/assets/act-zellige.jpg";
+import indigo from "@/assets/act-indigo.jpg";
+import thuya from "@/assets/act-thuya.jpg";
 
 export type PriceTier = "budget" | "standard" | "premium" | "luxe";
 export type WeatherSensitivity = "outdoor" | "indoor" | "any";
@@ -33,6 +40,7 @@ export type Activity = {
 
 const img = {
   sahara, surf, hammam, cooking, balloon, quad, mosque, pottery, yacht, chefchaouen,
+  medinaSouk, escapeGame, calligraphy, tannery, zellige, indigo, thuya,
 };
 
 const tierFromPrice = (p: number): PriceTier =>
@@ -71,7 +79,7 @@ export const ACTIVITIES: Activity[] = [
     "Hammam vapeur, gommage savon noir, gommage rose, massage à l'huile d'argan, thé.",
     "La Maison Arabe Spa", 1, "indoor"),
   a("mrk-5", "Visite guidée Médina & Souks", "marrakech", "Culture",
-    ["#SaveursAuthentiques", "#TraditionVivante"], "3h", 180, 4.6, 1567, img.pottery,
+    ["#SaveursAuthentiques", "#TraditionVivante"], "3h", 180, 4.6, 1567, img.medinaSouk,
     "Découvrez la Médina avec un guide local diplômé.",
     "Place Jemaa el-Fna, Madrasa Ben Youssef, souks, palais Bahia. Petit groupe, 3h.",
     "Marrakech Walks", 10, "outdoor"),
@@ -103,7 +111,7 @@ export const ACTIVITIES: Activity[] = [
     "Sfenj, harira, sardines grillées, pâtisseries… avec un guide passionné.",
     "Casa Foodies", 12, "outdoor"),
   a("csa-4", "Escape Game Casa Mystère", "casablanca", "Loisirs",
-    ["#AventureLudique", "#AmbianceFestive"], "1h", 150, 4.6, 528, img.pottery,
+    ["#AventureLudique", "#AmbianceFestive"], "1h", 150, 4.6, 528, img.escapeGame,
     "Résolvez l'énigme du palais perdu en équipe.",
     "Salle thématique immersive, animateur dédié, 2 à 6 joueurs.",
     "Lock'n Go Casa", 6, "indoor"),
@@ -120,7 +128,7 @@ export const ACTIVITIES: Activity[] = [
     "Guide diplômé, jardin andalou, dégustation de thé à la menthe au café Maure.",
     "Rabat Heritage", 12, "outdoor"),
   a("rba-2", "Atelier calligraphie arabe", "rabat", "Artisanat",
-    ["#TraditionVivante", "#DéconnexionTotale"], "2h", 250, 4.8, 156, img.pottery,
+    ["#TraditionVivante", "#DéconnexionTotale"], "2h", 250, 4.8, 156, img.calligraphy,
     "Apprenez l'art de la calligraphie maghrébine.",
     "Initié par un maître, repartez avec votre œuvre encadrée.",
     "Madrassat Al Khat", 8, "indoor"),
@@ -159,12 +167,12 @@ export const ACTIVITIES: Activity[] = [
 
   // Fès
   a("fez-1", "Tour artisans tanneurs Chouara", "fes", "Artisanat",
-    ["#TraditionVivante", "#SaveursAuthentiques"], "3h", 200, 4.7, 1432, img.pottery,
+    ["#TraditionVivante", "#SaveursAuthentiques"], "3h", 200, 4.7, 1432, img.tannery,
     "La plus vieille tannerie au monde.",
     "Guide local, vue panoramique, atelier maroquinerie.",
     "Fès Authentic", 12, "outdoor"),
   a("fez-2", "Atelier zellige avec maître artisan", "fes", "Artisanat",
-    ["#TraditionVivante", "#DéconnexionTotale"], "3h", 380, 4.9, 287, img.pottery,
+    ["#TraditionVivante", "#DéconnexionTotale"], "3h", 380, 4.9, 287, img.zellige,
     "Découvrez l'art du zellige fassi millénaire.",
     "Démonstration, initiation pratique, votre création offerte.",
     "Naji Zellige House", 6, "indoor"),
@@ -191,7 +199,7 @@ export const ACTIVITIES: Activity[] = [
     "Guide montagne, déjeuner pique-nique, transferts.",
     "Rif Trekking", 12, "outdoor"),
   a("chf-3", "Atelier teinture indigo", "chefchaouen", "Artisanat",
-    ["#TraditionVivante", "#DéconnexionTotale"], "2h", 180, 4.7, 142, img.pottery,
+    ["#TraditionVivante", "#DéconnexionTotale"], "2h", 180, 4.7, 142, img.indigo,
     "Le secret du fameux bleu Chaouen.",
     "Histoire, démonstration, créez votre tissu indigo à emporter.",
     "Bleu de Chefchaouen", 8, "indoor"),
@@ -235,7 +243,7 @@ export const ACTIVITIES: Activity[] = [
     "Encadrement, photos, thé sur la plage.",
     "Essaouira Camel Tours", 12, "outdoor"),
   a("ess-3", "Atelier marqueterie thuya", "essaouira", "Artisanat",
-    ["#TraditionVivante", "#DéconnexionTotale"], "2h30", 290, 4.8, 167, img.pottery,
+    ["#TraditionVivante", "#DéconnexionTotale"], "2h30", 290, 4.8, 167, img.thuya,
     "Travail du bois de thuya, spécialité d'Essaouira.",
     "Initiation, votre boîte à secret à emporter.",
     "Coopérative Thuya", 6, "indoor"),
