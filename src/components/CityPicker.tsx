@@ -22,12 +22,16 @@ export function CityPicker() {
     <div className="relative" ref={ref}>
       <button
         onClick={() => setOpen(!open)}
-        className="flex h-10 items-center gap-1.5 rounded-full border border-border bg-card px-3 text-xs font-semibold transition hover:border-primary"
+        className={`flex h-10 items-center gap-1.5 rounded-full px-3 text-xs font-semibold transition ${
+          manualCity
+            ? "bg-primary text-primary-foreground shadow-soft hover:opacity-90"
+            : "border border-primary/40 bg-primary/10 text-foreground hover:border-primary"
+        }`}
         aria-label="Choisir ma ville"
       >
-        <MapPin className="h-3.5 w-3.5 text-primary" />
-        <span className="max-w-[80px] truncate sm:max-w-none">{label}</span>
-        <ChevronDown className="h-3.5 w-3.5 text-muted-foreground" />
+        <MapPin className="h-3.5 w-3.5" />
+        <span className="max-w-[100px] truncate sm:max-w-none">{label}</span>
+        <ChevronDown className="h-3.5 w-3.5 opacity-70" />
       </button>
 
       {open && (
