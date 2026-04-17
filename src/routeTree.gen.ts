@@ -9,15 +9,39 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as WeatherRouteImport } from './routes/weather'
+import { Route as ProfileRouteImport } from './routes/profile'
 import { Route as ProRouteImport } from './routes/pro'
+import { Route as LightningRouteImport } from './routes/lightning'
+import { Route as FlashDealsRouteImport } from './routes/flash-deals'
 import { Route as ActivitiesRouteImport } from './routes/activities'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as ActivityIdRouteImport } from './routes/activity.$id'
 
+const WeatherRoute = WeatherRouteImport.update({
+  id: '/weather',
+  path: '/weather',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ProfileRoute = ProfileRouteImport.update({
+  id: '/profile',
+  path: '/profile',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ProRoute = ProRouteImport.update({
   id: '/pro',
   path: '/pro',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LightningRoute = LightningRouteImport.update({
+  id: '/lightning',
+  path: '/lightning',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const FlashDealsRoute = FlashDealsRouteImport.update({
+  id: '/flash-deals',
+  path: '/flash-deals',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ActivitiesRoute = ActivitiesRouteImport.update({
@@ -45,14 +69,22 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
   '/activities': typeof ActivitiesRoute
+  '/flash-deals': typeof FlashDealsRoute
+  '/lightning': typeof LightningRoute
   '/pro': typeof ProRoute
+  '/profile': typeof ProfileRoute
+  '/weather': typeof WeatherRoute
   '/activity/$id': typeof ActivityIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
   '/activities': typeof ActivitiesRoute
+  '/flash-deals': typeof FlashDealsRoute
+  '/lightning': typeof LightningRoute
   '/pro': typeof ProRoute
+  '/profile': typeof ProfileRoute
+  '/weather': typeof WeatherRoute
   '/activity/$id': typeof ActivityIdRoute
 }
 export interface FileRoutesById {
@@ -60,32 +92,96 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
   '/activities': typeof ActivitiesRoute
+  '/flash-deals': typeof FlashDealsRoute
+  '/lightning': typeof LightningRoute
   '/pro': typeof ProRoute
+  '/profile': typeof ProfileRoute
+  '/weather': typeof WeatherRoute
   '/activity/$id': typeof ActivityIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/about' | '/activities' | '/pro' | '/activity/$id'
+  fullPaths:
+    | '/'
+    | '/about'
+    | '/activities'
+    | '/flash-deals'
+    | '/lightning'
+    | '/pro'
+    | '/profile'
+    | '/weather'
+    | '/activity/$id'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/about' | '/activities' | '/pro' | '/activity/$id'
-  id: '__root__' | '/' | '/about' | '/activities' | '/pro' | '/activity/$id'
+  to:
+    | '/'
+    | '/about'
+    | '/activities'
+    | '/flash-deals'
+    | '/lightning'
+    | '/pro'
+    | '/profile'
+    | '/weather'
+    | '/activity/$id'
+  id:
+    | '__root__'
+    | '/'
+    | '/about'
+    | '/activities'
+    | '/flash-deals'
+    | '/lightning'
+    | '/pro'
+    | '/profile'
+    | '/weather'
+    | '/activity/$id'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AboutRoute: typeof AboutRoute
   ActivitiesRoute: typeof ActivitiesRoute
+  FlashDealsRoute: typeof FlashDealsRoute
+  LightningRoute: typeof LightningRoute
   ProRoute: typeof ProRoute
+  ProfileRoute: typeof ProfileRoute
+  WeatherRoute: typeof WeatherRoute
   ActivityIdRoute: typeof ActivityIdRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/weather': {
+      id: '/weather'
+      path: '/weather'
+      fullPath: '/weather'
+      preLoaderRoute: typeof WeatherRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/profile': {
+      id: '/profile'
+      path: '/profile'
+      fullPath: '/profile'
+      preLoaderRoute: typeof ProfileRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/pro': {
       id: '/pro'
       path: '/pro'
       fullPath: '/pro'
       preLoaderRoute: typeof ProRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/lightning': {
+      id: '/lightning'
+      path: '/lightning'
+      fullPath: '/lightning'
+      preLoaderRoute: typeof LightningRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/flash-deals': {
+      id: '/flash-deals'
+      path: '/flash-deals'
+      fullPath: '/flash-deals'
+      preLoaderRoute: typeof FlashDealsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/activities': {
@@ -123,9 +219,22 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AboutRoute: AboutRoute,
   ActivitiesRoute: ActivitiesRoute,
+  FlashDealsRoute: FlashDealsRoute,
+  LightningRoute: LightningRoute,
   ProRoute: ProRoute,
+  ProfileRoute: ProfileRoute,
+  WeatherRoute: WeatherRoute,
   ActivityIdRoute: ActivityIdRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { createStart } from '@tanstack/react-start'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+  }
+}
