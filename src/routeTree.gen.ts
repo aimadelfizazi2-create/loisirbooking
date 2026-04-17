@@ -9,12 +9,25 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as ProRouteImport } from './routes/pro'
 import { Route as ActivitiesRouteImport } from './routes/activities'
+import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as ActivityIdRouteImport } from './routes/activity.$id'
 
+const ProRoute = ProRouteImport.update({
+  id: '/pro',
+  path: '/pro',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ActivitiesRoute = ActivitiesRouteImport.update({
   id: '/activities',
   path: '/activities',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AboutRoute = AboutRouteImport.update({
+  id: '/about',
+  path: '/about',
   getParentRoute: () => rootRouteImport,
 } as any)
 const IndexRoute = IndexRouteImport.update({
@@ -22,40 +35,71 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ActivityIdRoute = ActivityIdRouteImport.update({
+  id: '/activity/$id',
+  path: '/activity/$id',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/about': typeof AboutRoute
   '/activities': typeof ActivitiesRoute
+  '/pro': typeof ProRoute
+  '/activity/$id': typeof ActivityIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/about': typeof AboutRoute
   '/activities': typeof ActivitiesRoute
+  '/pro': typeof ProRoute
+  '/activity/$id': typeof ActivityIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/about': typeof AboutRoute
   '/activities': typeof ActivitiesRoute
+  '/pro': typeof ProRoute
+  '/activity/$id': typeof ActivityIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/activities'
+  fullPaths: '/' | '/about' | '/activities' | '/pro' | '/activity/$id'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/activities'
-  id: '__root__' | '/' | '/activities'
+  to: '/' | '/about' | '/activities' | '/pro' | '/activity/$id'
+  id: '__root__' | '/' | '/about' | '/activities' | '/pro' | '/activity/$id'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AboutRoute: typeof AboutRoute
   ActivitiesRoute: typeof ActivitiesRoute
+  ProRoute: typeof ProRoute
+  ActivityIdRoute: typeof ActivityIdRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/pro': {
+      id: '/pro'
+      path: '/pro'
+      fullPath: '/pro'
+      preLoaderRoute: typeof ProRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/activities': {
       id: '/activities'
       path: '/activities'
       fullPath: '/activities'
       preLoaderRoute: typeof ActivitiesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/about': {
+      id: '/about'
+      path: '/about'
+      fullPath: '/about'
+      preLoaderRoute: typeof AboutRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/': {
@@ -65,12 +109,22 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/activity/$id': {
+      id: '/activity/$id'
+      path: '/activity/$id'
+      fullPath: '/activity/$id'
+      preLoaderRoute: typeof ActivityIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AboutRoute: AboutRoute,
   ActivitiesRoute: ActivitiesRoute,
+  ProRoute: ProRoute,
+  ActivityIdRoute: ActivityIdRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
