@@ -1,5 +1,5 @@
 import { Link, useNavigate, useLocation } from "@tanstack/react-router";
-import { Menu, X, LogOut, LayoutDashboard, User as UserIcon, ChevronDown, Compass, Zap, MapPin, Route as RouteIcon, CloudSun, Sparkles, Briefcase } from "lucide-react";
+import { Menu, X, LogOut, LayoutDashboard, User as UserIcon, ChevronDown, Compass, Zap, MapPin, Route as RouteIcon, CloudSun, Sparkles, Briefcase, Settings, Headphones } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { CityPicker } from "./CityPicker";
 import { useAuth } from "@/contexts/AuthContext";
@@ -202,6 +202,20 @@ export function Header() {
                         <LayoutDashboard className="h-4 w-4" /> Dashboard Partenaire
                       </Link>
                     )}
+                    <Link
+                      to="/settings"
+                      onClick={() => setUserMenu(false)}
+                      className="flex items-center gap-2 rounded-xl px-3 py-2 text-sm hover:bg-secondary"
+                    >
+                      <Settings className="h-4 w-4" /> Paramètres
+                    </Link>
+                    <Link
+                      to="/support"
+                      onClick={() => setUserMenu(false)}
+                      className="flex items-center gap-2 rounded-xl px-3 py-2 text-sm hover:bg-secondary"
+                    >
+                      <Headphones className="h-4 w-4" /> Support
+                    </Link>
                     <button
                       onClick={handleLogout}
                       className="flex w-full items-center gap-2 rounded-xl px-3 py-2 text-left text-sm text-destructive hover:bg-destructive/10"

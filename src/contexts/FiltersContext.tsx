@@ -26,7 +26,7 @@ const Ctx = createContext<FiltersState | null>(null);
 export function FiltersProvider({ children }: { children: ReactNode }) {
   const [selectedCities, setSelectedCities] = useState<string[]>([]);
   const [budget, setBudget] = useState<PriceTier | "all">("all");
-  const [groupSize, setGroupSize] = useState(2);
+  const [groupSize, setGroupSize] = useState(1);
   const [moods, setMoods] = useState<string[]>([]);
   const [search, setSearch] = useState("");
   const [detectedCity, setDetectedCity] = useState<City | null>(null);

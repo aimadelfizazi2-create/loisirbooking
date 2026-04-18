@@ -4,7 +4,6 @@ import hammam from "@/assets/act-hammam.jpg";
 import cooking from "@/assets/act-cooking.jpg";
 import balloon from "@/assets/act-balloon.jpg";
 import quad from "@/assets/act-quad.jpg";
-import mosque from "@/assets/act-mosque.jpg";
 import pottery from "@/assets/act-pottery-zellige.jpg";
 import yacht from "@/assets/act-yacht.jpg";
 import chefchaouen from "@/assets/hero-chefchaouen.jpg";
@@ -15,6 +14,13 @@ import tannery from "@/assets/act-tannery.jpg";
 import zellige from "@/assets/act-zellige.jpg";
 import indigo from "@/assets/act-indigo.jpg";
 import thuya from "@/assets/act-thuya.jpg";
+import hassan2 from "@/assets/act-hassan2.jpg";
+import oudayas from "@/assets/act-oudayas.jpg";
+import tangerMedina from "@/assets/act-tanger-medina.jpg";
+import aitBenhaddou from "@/assets/act-aitbenhaddou.jpg";
+import volubilis from "@/assets/act-volubilis.jpg";
+import tetouan from "@/assets/act-tetouan.jpg";
+import fesNight from "@/assets/act-fes-night.jpg";
 
 export type PriceTier = "budget" | "standard" | "premium" | "luxe";
 export type WeatherSensitivity = "outdoor" | "indoor" | "any";
@@ -39,8 +45,9 @@ export type Activity = {
 };
 
 const img = {
-  sahara, surf, hammam, cooking, balloon, quad, mosque, pottery, yacht, chefchaouen,
+  sahara, surf, hammam, cooking, balloon, quad, pottery, yacht, chefchaouen,
   medinaSouk, escapeGame, calligraphy, tannery, zellige, indigo, thuya,
+  hassan2, oudayas, tangerMedina, aitBenhaddou, volubilis, tetouan, fesNight,
 };
 
 const tierFromPrice = (p: number): PriceTier =>
@@ -96,7 +103,7 @@ export const ACTIVITIES: Activity[] = [
 
   // Casablanca
   a("csa-1", "Visite Mosquée Hassan II + skip-line", "casablanca", "Culture",
-    ["#TraditionVivante", "#MomentMagique"], "1h30", 220, 4.8, 3401, img.mosque,
+    ["#TraditionVivante", "#MomentMagique"], "1h30", 220, 4.8, 3401, img.hassan2,
     "Découvrez l'un des plus grands lieux de culte au monde.",
     "Audio-guide multilingue, accès prioritaire, explications historiques et architecturales.",
     "Casa Tours", 25, "indoor"),
@@ -123,7 +130,7 @@ export const ACTIVITIES: Activity[] = [
 
   // Rabat
   a("rba-1", "Visite Kasbah des Oudayas + thé", "rabat", "Culture",
-    ["#TraditionVivante", "#DéconnexionTotale"], "2h", 140, 4.7, 891, img.mosque,
+    ["#TraditionVivante", "#DéconnexionTotale"], "2h", 140, 4.7, 891, img.oudayas,
     "Promenade dans la kasbah bleue et blanche.",
     "Guide diplômé, jardin andalou, dégustation de thé à la menthe au café Maure.",
     "Rabat Heritage", 12, "outdoor"),
@@ -155,7 +162,7 @@ export const ACTIVITIES: Activity[] = [
     "Boissons incluses, musique douce, photos panoramiques.",
     "Strait of Gibraltar Sailing", 25, "outdoor"),
   a("tng-3", "Visite Médina + Café Hafa", "tanger", "Culture",
-    ["#TraditionVivante", "#SaveursAuthentiques"], "3h", 160, 4.6, 489, img.mosque,
+    ["#TraditionVivante", "#SaveursAuthentiques"], "3h", 160, 4.6, 489, img.tangerMedina,
     "Sur les traces de Bowles et des Rolling Stones.",
     "Visite guidée littéraire de la Médina, thé au mythique café Hafa.",
     "Tanger Stories", 10, "outdoor"),
@@ -182,7 +189,7 @@ export const ACTIVITIES: Activity[] = [
     "Marché, cuisine, repas partagé, recettes traditionnelles.",
     "Dar Bensouda Cooking", 8, "indoor"),
   a("fez-4", "Visite nocturne Médina + dîner riad", "fes", "Culture",
-    ["#MomentMagique", "#SaveursAuthentiques"], "3h30", 320, 4.8, 198, img.mosque,
+    ["#MomentMagique", "#SaveursAuthentiques"], "3h30", 320, 4.8, 198, img.fesNight,
     "La Médina s'illumine de mille feux.",
     "Guide passionné, dîner traditionnel dans un riad authentique.",
     "Fès by Night", 10, "indoor"),
@@ -272,7 +279,7 @@ export const ACTIVITIES: Activity[] = [
 
   // Ouarzazate
   a("orz-1", "Visite Aït Benhaddou + studios cinéma", "ouarzazate", "Culture",
-    ["#TraditionVivante", "#MomentMagique"], "Journée", 380, 4.8, 765, img.mosque,
+    ["#TraditionVivante", "#MomentMagique"], "Journée", 380, 4.8, 765, img.aitBenhaddou,
     "Kasbah UNESCO et Hollywood marocain.",
     "Guide francophone, déjeuner berbère, transport AC.",
     "Atlas Movies Tour", 16, "outdoor"),
@@ -284,7 +291,7 @@ export const ACTIVITIES: Activity[] = [
 
   // Meknès
   a("mkn-1", "Visite Volubilis romaine + Moulay Idriss", "meknes", "Culture",
-    ["#TraditionVivante", "#MomentMagique"], "Journée", 320, 4.7, 412, img.mosque,
+    ["#TraditionVivante", "#MomentMagique"], "Journée", 320, 4.7, 412, img.volubilis,
     "Ruines romaines exceptionnelles + ville sainte.",
     "Guide archéologue, déjeuner local, transferts.",
     "Meknès Heritage Tours", 14, "outdoor"),
@@ -296,7 +303,7 @@ export const ACTIVITIES: Activity[] = [
 
   // Tétouan
   a("tet-1", "Médina UNESCO de Tétouan", "tetouan", "Culture",
-    ["#TraditionVivante", "#SaveursAuthentiques"], "2h30", 150, 4.7, 234, img.mosque,
+    ["#TraditionVivante", "#SaveursAuthentiques"], "2h30", 150, 4.7, 234, img.tetouan,
     "Une médina andalouse préservée.",
     "Guide passionné, atelier brodeuse, dégustation pâtisseries.",
     "Tétouan Walks", 12, "outdoor"),
