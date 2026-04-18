@@ -4,6 +4,7 @@ import { FilterBar } from "@/components/FilterBar";
 import { MoodPicker } from "@/components/MoodPicker";
 import { ActivitiesGrid } from "@/components/ActivitiesGrid";
 import { GoldenHourWidget } from "@/components/GoldenHourWidget";
+import { useAuth } from "@/contexts/AuthContext";
 import { ArrowRight, Sparkles, Zap, Users, Shield } from "lucide-react";
 
 export const Route = createFileRoute("/")({
@@ -19,6 +20,7 @@ export const Route = createFileRoute("/")({
 });
 
 function HomePage() {
+  const { isPartner } = useAuth();
   return (
     <div>
       {/* Hero */}
@@ -53,12 +55,14 @@ function HomePage() {
               >
                 Explorer les activités <ArrowRight className="h-4 w-4" />
               </Link>
-              <Link
-                to="/pro"
-                className="inline-flex items-center gap-2 rounded-full border border-white/40 bg-white/10 px-6 py-3 font-semibold text-white backdrop-blur transition hover:bg-white/20"
-              >
-                Je suis prestataire
-              </Link>
+              {!isPartner && (
+                <Link
+                  to="/partner"
+                  className="inline-flex items-center gap-2 rounded-full border border-white/40 bg-white/10 px-6 py-3 font-semibold text-white backdrop-blur transition hover:bg-white/20"
+                >
+                  Je suis prestataire
+                </Link>
+              )}
             </div>
           </div>
         </div>
@@ -122,28 +126,30 @@ function HomePage() {
         </div>
       </section>
 
-      {/* CTA Pro */}
-      <section className="mx-auto max-w-7xl px-4 py-20 md:px-8">
-        <div className="relative overflow-hidden rounded-3xl bg-gradient-warm p-10 text-primary-foreground md:p-16">
-          <div className="pattern-zellige absolute inset-0" />
-          <div className="relative grid gap-8 md:grid-cols-2 md:items-center">
-            <div>
-              <h2 className="font-display text-3xl font-bold md:text-5xl">Vous êtes artisan, guide, prestataire ?</h2>
-              <p className="mt-4 text-lg opacity-95">
-                Remplissez vos créneaux creux. Zéro no-show. Tableau de bord SaaS, alertes Flash Deal, paiement sécurisé.
-              </p>
+      {/* CTA Partenaire — masqué pour les partenaires déjà actifs */}
+      {!isPartner && (
+        <section className="mx-auto max-w-7xl px-4 py-20 md:px-8">
+          <Link
+            to="/partner"
+            className="group relative block overflow-hidden rounded-3xl bg-gradient-warm p-10 text-primary-foreground shadow-soft transition hover:shadow-elegant md:p-16"
+          >
+            <div className="pattern-zellige absolute inset-0" />
+            <div className="relative grid gap-8 md:grid-cols-2 md:items-center">
+              <div>
+                <h2 className="font-display text-3xl font-bold md:text-5xl">Vous êtes artisan, guide, prestataire ?</h2>
+                <p className="mt-4 text-lg opacity-95">
+                  Remplissez vos créneaux creux. Zéro no-show. Tableau de bord SaaS, alertes Flash Deal, paiement sécurisé.
+                </p>
+              </div>
+              <div className="flex justify-start md:justify-end">
+                <span className="inline-flex items-center gap-2 rounded-full bg-white px-7 py-3.5 font-semibold text-primary shadow-soft transition group-hover:scale-105">
+                  Devenir partenaire <ArrowRight className="h-4 w-4" />
+                </span>
+              </div>
             </div>
-            <div className="flex justify-start md:justify-end">
-              <Link
-                to="/pro"
-                className="inline-flex items-center gap-2 rounded-full bg-white px-7 py-3.5 font-semibold text-primary shadow-soft transition hover:scale-105"
-              >
-                Devenir partenaire <ArrowRight className="h-4 w-4" />
-              </Link>
-            </div>
-          </div>
-        </div>
-      </section>
+          </Link>
+        </section>
+      )}
     </div>
   );
 }

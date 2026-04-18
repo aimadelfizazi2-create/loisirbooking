@@ -120,9 +120,14 @@ function LightningPage() {
           const city = CITIES.find((c) => c.id === a.city);
           const full = g.current >= g.capacity;
           return (
-            <article key={g.id} className="overflow-hidden rounded-3xl border border-border bg-card shadow-soft transition hover:shadow-elegant">
+            <Link
+              key={g.id}
+              to="/activity/$id"
+              params={{ id: a.id }}
+              className="group block overflow-hidden rounded-3xl border border-border bg-card shadow-soft transition hover:-translate-y-1 hover:shadow-elegant"
+            >
               <div className="relative aspect-[16/9] overflow-hidden">
-                <img src={a.image} alt={a.title} className="h-full w-full object-cover" />
+                <img src={a.image} alt={a.title} className="h-full w-full object-cover transition duration-500 group-hover:scale-105" />
                 <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/70 to-transparent p-4">
                   <div className="flex items-center gap-1.5 text-xs text-white/90">
                     <MapPin className="h-3 w-3" /> {city?.name}
@@ -160,23 +165,22 @@ function LightningPage() {
                   ))}
                 </div>
 
-                <div className="mt-4 flex gap-2">
-                  <button
-                    disabled={full}
-                    className="flex-1 rounded-full bg-foreground px-4 py-2 text-xs font-semibold text-background transition hover:opacity-90 disabled:opacity-40"
+                <div className="mt-4 flex items-center gap-2">
+                  <span
+                    className={`flex-1 rounded-full px-4 py-2 text-center text-xs font-semibold transition ${
+                      full
+                        ? "bg-muted text-muted-foreground"
+                        : "bg-foreground text-background group-hover:opacity-90"
+                    }`}
                   >
-                    {full ? "Complet" : "Rejoindre"}
-                  </button>
-                  <Link
-                    to="/activity/$id"
-                    params={{ id: a.id }}
-                    className="flex h-9 w-9 items-center justify-center rounded-full border border-border transition hover:border-primary"
-                  >
+                    {full ? "Complet — voir l'activité" : "Rejoindre & réserver"}
+                  </span>
+                  <span className="flex h-9 w-9 items-center justify-center rounded-full border border-border transition group-hover:border-primary">
                     <MessageCircle className="h-4 w-4" />
-                  </Link>
+                  </span>
                 </div>
               </div>
-            </article>
+            </Link>
           );
         })}
       </div>
