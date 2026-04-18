@@ -10,6 +10,8 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as WeatherRouteImport } from './routes/weather'
+import { Route as SupportRouteImport } from './routes/support'
+import { Route as SettingsRouteImport } from './routes/settings'
 import { Route as ProfileRouteImport } from './routes/profile'
 import { Route as PartnerRouteImport } from './routes/partner'
 import { Route as NearbyRouteImport } from './routes/nearby'
@@ -25,6 +27,16 @@ import { Route as ActivityIdRouteImport } from './routes/activity.$id'
 const WeatherRoute = WeatherRouteImport.update({
   id: '/weather',
   path: '/weather',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SupportRoute = SupportRouteImport.update({
+  id: '/support',
+  path: '/support',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SettingsRoute = SettingsRouteImport.update({
+  id: '/settings',
+  path: '/settings',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ProfileRoute = ProfileRouteImport.update({
@@ -94,6 +106,8 @@ export interface FileRoutesByFullPath {
   '/nearby': typeof NearbyRoute
   '/partner': typeof PartnerRoute
   '/profile': typeof ProfileRoute
+  '/settings': typeof SettingsRoute
+  '/support': typeof SupportRoute
   '/weather': typeof WeatherRoute
   '/activity/$id': typeof ActivityIdRoute
 }
@@ -108,6 +122,8 @@ export interface FileRoutesByTo {
   '/nearby': typeof NearbyRoute
   '/partner': typeof PartnerRoute
   '/profile': typeof ProfileRoute
+  '/settings': typeof SettingsRoute
+  '/support': typeof SupportRoute
   '/weather': typeof WeatherRoute
   '/activity/$id': typeof ActivityIdRoute
 }
@@ -123,6 +139,8 @@ export interface FileRoutesById {
   '/nearby': typeof NearbyRoute
   '/partner': typeof PartnerRoute
   '/profile': typeof ProfileRoute
+  '/settings': typeof SettingsRoute
+  '/support': typeof SupportRoute
   '/weather': typeof WeatherRoute
   '/activity/$id': typeof ActivityIdRoute
 }
@@ -139,6 +157,8 @@ export interface FileRouteTypes {
     | '/nearby'
     | '/partner'
     | '/profile'
+    | '/settings'
+    | '/support'
     | '/weather'
     | '/activity/$id'
   fileRoutesByTo: FileRoutesByTo
@@ -153,6 +173,8 @@ export interface FileRouteTypes {
     | '/nearby'
     | '/partner'
     | '/profile'
+    | '/settings'
+    | '/support'
     | '/weather'
     | '/activity/$id'
   id:
@@ -167,6 +189,8 @@ export interface FileRouteTypes {
     | '/nearby'
     | '/partner'
     | '/profile'
+    | '/settings'
+    | '/support'
     | '/weather'
     | '/activity/$id'
   fileRoutesById: FileRoutesById
@@ -182,6 +206,8 @@ export interface RootRouteChildren {
   NearbyRoute: typeof NearbyRoute
   PartnerRoute: typeof PartnerRoute
   ProfileRoute: typeof ProfileRoute
+  SettingsRoute: typeof SettingsRoute
+  SupportRoute: typeof SupportRoute
   WeatherRoute: typeof WeatherRoute
   ActivityIdRoute: typeof ActivityIdRoute
 }
@@ -193,6 +219,20 @@ declare module '@tanstack/react-router' {
       path: '/weather'
       fullPath: '/weather'
       preLoaderRoute: typeof WeatherRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/support': {
+      id: '/support'
+      path: '/support'
+      fullPath: '/support'
+      preLoaderRoute: typeof SupportRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/settings': {
+      id: '/settings'
+      path: '/settings'
+      fullPath: '/settings'
+      preLoaderRoute: typeof SettingsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/profile': {
@@ -286,6 +326,8 @@ const rootRouteChildren: RootRouteChildren = {
   NearbyRoute: NearbyRoute,
   PartnerRoute: PartnerRoute,
   ProfileRoute: ProfileRoute,
+  SettingsRoute: SettingsRoute,
+  SupportRoute: SupportRoute,
   WeatherRoute: WeatherRoute,
   ActivityIdRoute: ActivityIdRoute,
 }

@@ -51,7 +51,13 @@ function SettingsPage() {
     setSaved(false);
     setError(null);
 
-    const updates: Record<string, string | null> = {
+    const updates: {
+      full_name: string | null;
+      city: string | null;
+      avatar_url: string | null;
+      partner_business_name?: string | null;
+      partner_activity_id?: string | null;
+    } = {
       full_name: fullName.trim() || null,
       city: city || null,
       avatar_url: avatarUrl.trim() || null,
