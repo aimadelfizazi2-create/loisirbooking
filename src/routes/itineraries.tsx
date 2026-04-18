@@ -49,13 +49,20 @@ function ItineraryCard({ id }: { id: string }) {
     .filter(Boolean)
     .slice(0, 3);
 
+  // Première activité du parcours = point d'entrée pour réserver
+  const firstActivityId = it.activityIds[0];
+
   const paceColor =
     it.pace === "Tranquille" ? "bg-mint/20 text-foreground"
     : it.pace === "Équilibré" ? "bg-saffron/20 text-foreground"
     : "bg-destructive/15 text-destructive";
 
   return (
-    <article className="group overflow-hidden rounded-3xl border border-border bg-card shadow-soft transition hover:shadow-elegant">
+    <Link
+      to="/activity/$id"
+      params={{ id: firstActivityId }}
+      className="group block overflow-hidden rounded-3xl border border-border bg-card shadow-soft transition hover:-translate-y-1 hover:shadow-elegant"
+    >
       <div className="relative h-48 overflow-hidden bg-gradient-warm">
         <div className="pattern-zellige absolute inset-0 opacity-40" />
         <div className="absolute inset-0 flex items-center justify-center text-7xl">{it.emoji}</div>
@@ -96,14 +103,12 @@ function ItineraryCard({ id }: { id: string }) {
             </div>
             <div className="mt-2 flex gap-2 overflow-x-auto">
               {acts.map((a) => (
-                <Link
+                <img
                   key={a!.id}
-                  to="/activity/$id"
-                  params={{ id: a!.id }}
-                  className="flex-shrink-0"
-                >
-                  <img src={a!.image} alt={a!.title} className="h-14 w-14 rounded-xl object-cover transition hover:scale-105" />
-                </Link>
+                  src={a!.image}
+                  alt={a!.title}
+                  className="h-14 w-14 flex-shrink-0 rounded-xl object-cover"
+                />
               ))}
             </div>
           </div>
@@ -117,11 +122,11 @@ function ItineraryCard({ id }: { id: string }) {
             </div>
             <div className="text-[11px] text-muted-foreground">par personne · {it.best}</div>
           </div>
-          <button className="inline-flex items-center gap-1.5 rounded-full bg-primary px-5 py-2.5 text-sm font-bold text-primary-foreground transition hover:opacity-90">
+          <span className="inline-flex items-center gap-1.5 rounded-full bg-primary px-5 py-2.5 text-sm font-bold text-primary-foreground transition group-hover:opacity-90">
             Réserver <ArrowRight className="h-4 w-4" />
-          </button>
+          </span>
         </div>
       </div>
-    </article>
+    </Link>
   );
 }
