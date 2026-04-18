@@ -4,7 +4,6 @@ import hammam from "@/assets/act-hammam.jpg";
 import cooking from "@/assets/act-cooking.jpg";
 import balloon from "@/assets/act-balloon.jpg";
 import quad from "@/assets/act-quad.jpg";
-import mosque from "@/assets/act-mosque.jpg";
 import pottery from "@/assets/act-pottery-zellige.jpg";
 import yacht from "@/assets/act-yacht.jpg";
 import chefchaouen from "@/assets/hero-chefchaouen.jpg";
@@ -15,6 +14,13 @@ import tannery from "@/assets/act-tannery.jpg";
 import zellige from "@/assets/act-zellige.jpg";
 import indigo from "@/assets/act-indigo.jpg";
 import thuya from "@/assets/act-thuya.jpg";
+import hassan2 from "@/assets/act-hassan2.jpg";
+import oudayas from "@/assets/act-oudayas.jpg";
+import tangerMedina from "@/assets/act-tanger-medina.jpg";
+import aitBenhaddou from "@/assets/act-aitbenhaddou.jpg";
+import volubilis from "@/assets/act-volubilis.jpg";
+import tetouan from "@/assets/act-tetouan.jpg";
+import fesNight from "@/assets/act-fes-night.jpg";
 
 export type PriceTier = "budget" | "standard" | "premium" | "luxe";
 export type WeatherSensitivity = "outdoor" | "indoor" | "any";
@@ -39,8 +45,9 @@ export type Activity = {
 };
 
 const img = {
-  sahara, surf, hammam, cooking, balloon, quad, mosque, pottery, yacht, chefchaouen,
+  sahara, surf, hammam, cooking, balloon, quad, pottery, yacht, chefchaouen,
   medinaSouk, escapeGame, calligraphy, tannery, zellige, indigo, thuya,
+  hassan2, oudayas, tangerMedina, aitBenhaddou, volubilis, tetouan, fesNight,
 };
 
 const tierFromPrice = (p: number): PriceTier =>
