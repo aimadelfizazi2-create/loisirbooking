@@ -30,7 +30,10 @@ function AboutPage() {
           Cloud-native, méthode Agile, conformité RGPD et PCI-DSS. Mais surtout : un outil pensé pour les artisans, guides et petites structures qui font la richesse du Maroc.
         </Block>
         <Block title="Quatre innovations majeures">
-          Recherche par <strong>Mood</strong>, <strong>Lightning Matching</strong> social, <strong>Flash Deals</strong> géolocalisés, et soutien direct à <strong>l'économie locale</strong>.
+          Recherche par <strong>Mood</strong>, <strong>Lightning Matching</strong> social, <strong>Flash Deals</strong> géolocalisés, et notre assistante IA <strong>Yasmine</strong>.
+        </Block>
+        <Block title="Yasmine, votre conseillère IA 24/7">
+          Yasmine est l'assistante virtuelle de Loisirbooking : elle connaît tout le catalogue, les budgets, les catégories, la météo et nos fonctionnalités. Elle vous recommande l'expérience parfaite selon votre humeur, votre ville et le moment, et vous accompagne jusqu'à la réservation. Disponible en français, arabe, anglais et espagnol — directement depuis le bouton de chat en bas à droite.
         </Block>
         <Block title="Cap sur l'international">
           Après le Maroc, nous visons la Belgique, la Suisse, le Maghreb et l'Afrique francophone, puis l'Europe du Sud — partout où les loisirs locaux restent peu structurés numériquement.
