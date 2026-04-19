@@ -1,5 +1,5 @@
 import { Link, useNavigate, useLocation } from "@tanstack/react-router";
-import { Menu, X, LogOut, LayoutDashboard, User as UserIcon, ChevronDown, Compass, Zap, MapPin, Route as RouteIcon, CloudSun, Sparkles, Briefcase, Settings, Headphones } from "lucide-react";
+import { Menu, X, LogOut, LayoutDashboard, User as UserIcon, ChevronDown, Compass, Zap, MapPin, Route as RouteIcon, CloudSun, Sparkles, Briefcase, Settings, Headphones, FileText } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { CityPicker } from "./CityPicker";
 import { useAuth } from "@/contexts/AuthContext";
@@ -20,6 +20,7 @@ const NAV: NavEntry[] = [
       { to: "/activities", label: "Toutes les activités", icon: Compass, desc: "Catalogue complet filtrable" },
       { to: "/nearby", label: "Près de toi", icon: MapPin, desc: "Activités autour de ta position" },
       { to: "/itineraries", label: "Itinéraires", icon: RouteIcon, desc: "Voyages multi-villes prêts à partir" },
+      { to: "/finance", label: "Communication financière", icon: FileText, desc: "Rapports financiers partenaires (CGNC)" },
     ],
   },
   {

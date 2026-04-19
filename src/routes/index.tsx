@@ -5,7 +5,7 @@ import { MoodPicker } from "@/components/MoodPicker";
 import { ActivitiesGrid } from "@/components/ActivitiesGrid";
 import { GoldenHourWidget } from "@/components/GoldenHourWidget";
 import { useAuth } from "@/contexts/AuthContext";
-import { ArrowRight, Sparkles, Zap, Users, Shield } from "lucide-react";
+import { ArrowRight, Sparkles, Zap, Users, Bot } from "lucide-react";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -121,7 +121,7 @@ function HomePage() {
             <Pillar icon={<Sparkles className="h-6 w-6" />} title="Recherche par Mood" desc="Météo + géoloc + humeur = la bonne activité au bon moment." />
             <Pillar icon={<Users className="h-6 w-6" />} title="Lightning Matching" desc="Rejoignez ou créez un groupe éphémère pour vivre l'expérience à plusieurs." />
             <Pillar icon={<Zap className="h-6 w-6" />} title="Flash Deals géolocalisés" desc="Yield management automatisé : profitez des créneaux de dernière minute." />
-            <Pillar icon={<Shield className="h-6 w-6" />} title="Prestataires vérifiés" desc="Licences, assurances, qualité : chaque partenaire est contrôlé." />
+            <Pillar icon={<Bot className="h-6 w-6" />} title="Yasmine, l'assistante IA" desc="Conseillère virtuelle multilingue : recommandations, réservations et conseils 24h/24." />
           </div>
         </div>
       </section>

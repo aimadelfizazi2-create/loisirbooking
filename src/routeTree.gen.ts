@@ -18,6 +18,7 @@ import { Route as NearbyRouteImport } from './routes/nearby'
 import { Route as LightningRouteImport } from './routes/lightning'
 import { Route as ItinerariesRouteImport } from './routes/itineraries'
 import { Route as FlashDealsRouteImport } from './routes/flash-deals'
+import { Route as FinanceRouteImport } from './routes/finance'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as ActivitiesRouteImport } from './routes/activities'
 import { Route as AboutRouteImport } from './routes/about'
@@ -69,6 +70,11 @@ const FlashDealsRoute = FlashDealsRouteImport.update({
   path: '/flash-deals',
   getParentRoute: () => rootRouteImport,
 } as any)
+const FinanceRoute = FinanceRouteImport.update({
+  id: '/finance',
+  path: '/finance',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AuthRoute = AuthRouteImport.update({
   id: '/auth',
   path: '/auth',
@@ -100,6 +106,7 @@ export interface FileRoutesByFullPath {
   '/about': typeof AboutRoute
   '/activities': typeof ActivitiesRoute
   '/auth': typeof AuthRoute
+  '/finance': typeof FinanceRoute
   '/flash-deals': typeof FlashDealsRoute
   '/itineraries': typeof ItinerariesRoute
   '/lightning': typeof LightningRoute
@@ -116,6 +123,7 @@ export interface FileRoutesByTo {
   '/about': typeof AboutRoute
   '/activities': typeof ActivitiesRoute
   '/auth': typeof AuthRoute
+  '/finance': typeof FinanceRoute
   '/flash-deals': typeof FlashDealsRoute
   '/itineraries': typeof ItinerariesRoute
   '/lightning': typeof LightningRoute
@@ -133,6 +141,7 @@ export interface FileRoutesById {
   '/about': typeof AboutRoute
   '/activities': typeof ActivitiesRoute
   '/auth': typeof AuthRoute
+  '/finance': typeof FinanceRoute
   '/flash-deals': typeof FlashDealsRoute
   '/itineraries': typeof ItinerariesRoute
   '/lightning': typeof LightningRoute
@@ -151,6 +160,7 @@ export interface FileRouteTypes {
     | '/about'
     | '/activities'
     | '/auth'
+    | '/finance'
     | '/flash-deals'
     | '/itineraries'
     | '/lightning'
@@ -167,6 +177,7 @@ export interface FileRouteTypes {
     | '/about'
     | '/activities'
     | '/auth'
+    | '/finance'
     | '/flash-deals'
     | '/itineraries'
     | '/lightning'
@@ -183,6 +194,7 @@ export interface FileRouteTypes {
     | '/about'
     | '/activities'
     | '/auth'
+    | '/finance'
     | '/flash-deals'
     | '/itineraries'
     | '/lightning'
@@ -200,6 +212,7 @@ export interface RootRouteChildren {
   AboutRoute: typeof AboutRoute
   ActivitiesRoute: typeof ActivitiesRoute
   AuthRoute: typeof AuthRoute
+  FinanceRoute: typeof FinanceRoute
   FlashDealsRoute: typeof FlashDealsRoute
   ItinerariesRoute: typeof ItinerariesRoute
   LightningRoute: typeof LightningRoute
@@ -277,6 +290,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof FlashDealsRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/finance': {
+      id: '/finance'
+      path: '/finance'
+      fullPath: '/finance'
+      preLoaderRoute: typeof FinanceRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/auth': {
       id: '/auth'
       path: '/auth'
@@ -320,6 +340,7 @@ const rootRouteChildren: RootRouteChildren = {
   AboutRoute: AboutRoute,
   ActivitiesRoute: ActivitiesRoute,
   AuthRoute: AuthRoute,
+  FinanceRoute: FinanceRoute,
   FlashDealsRoute: FlashDealsRoute,
   ItinerariesRoute: ItinerariesRoute,
   LightningRoute: LightningRoute,
@@ -334,3 +355,12 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { createStart } from '@tanstack/react-start'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+  }
+}
