@@ -14,6 +14,8 @@ const tierStyles: Record<Activity["tier"], string> = {
 export function ActivityCard({ activity }: { activity: Activity }) {
   const city = CITIES.find((c) => c.id === activity.city);
   const tier = PRICE_TIERS.find((t) => t.id === activity.tier);
+  const { data: images } = useActivityImages(activity);
+  const heroSrc = images?.hero_url ?? activity.image;
 
   return (
     <Link
