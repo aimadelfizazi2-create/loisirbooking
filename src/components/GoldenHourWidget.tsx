@@ -2,7 +2,8 @@ import { useEffect, useMemo, useState } from "react";
 import { Link } from "@tanstack/react-router";
 import { Sun, Moon, Coffee, Wine, Sunrise } from "lucide-react";
 import { useFilters } from "@/contexts/FiltersContext";
-import { ACTIVITIES } from "@/data/activities";
+import { ACTIVITIES, type Activity } from "@/data/activities";
+import { useActivityImages } from "@/hooks/useActivityImages";
 
 type TimeSlot = {
   id: string;
@@ -86,23 +87,30 @@ export function GoldenHourWidget() {
 
           <div className="grid gap-3 sm:grid-cols-3">
             {suggestions.map((a) => (
-              <Link
-                key={a.id}
-                to="/activity/$id"
-                params={{ id: a.id }}
-                className="group relative overflow-hidden rounded-2xl bg-card shadow-soft transition hover:-translate-y-1 hover:shadow-elegant"
-              >
-                <img src={a.image} alt={a.title} className="h-32 w-full object-cover transition group-hover:scale-105" />
-                <div className="p-3">
-                  <div className="text-[10px] font-bold uppercase tracking-wider text-primary">{a.category}</div>
-                  <div className="line-clamp-2 mt-0.5 font-display text-sm font-bold leading-tight">{a.title}</div>
-                  <div className="mt-1.5 text-xs text-muted-foreground">{a.duration} · {a.price} MAD</div>
-                </div>
-              </Link>
+              <SuggestionCard key={a.id} activity={a} />
             ))}
           </div>
         </div>
       </div>
     </section>
+  );
+}
+
+function SuggestionCard({ activity }: { activity: Activity }) {
+  const { data: images } = useActivityImages(activity);
+  const src = images?.hero_url ?? activity.image;
+  return (
+    <Link
+      to="/activity/$id"
+      params={{ id: activity.id }}
+      className="group relative overflow-hidden rounded-2xl bg-card shadow-soft transition hover:-translate-y-1 hover:shadow-elegant"
+    >
+      <img src={src} alt={activity.title} loading="lazy" className="h-32 w-full object-cover transition group-hover:scale-105" />
+      <div className="p-3">
+        <div className="text-[10px] font-bold uppercase tracking-wider text-primary">{activity.category}</div>
+        <div className="line-clamp-2 mt-0.5 font-display text-sm font-bold leading-tight">{activity.title}</div>
+        <div className="mt-1.5 text-xs text-muted-foreground">{activity.duration} · {activity.price} MAD</div>
+      </div>
+    </Link>
   );
 }
