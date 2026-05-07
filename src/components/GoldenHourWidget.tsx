@@ -95,3 +95,22 @@ export function GoldenHourWidget() {
     </section>
   );
 }
+
+function SuggestionCard({ activity }: { activity: Activity }) {
+  const { data: images } = useActivityImages(activity);
+  const src = images?.hero_url ?? activity.image;
+  return (
+    <Link
+      to="/activity/$id"
+      params={{ id: activity.id }}
+      className="group relative overflow-hidden rounded-2xl bg-card shadow-soft transition hover:-translate-y-1 hover:shadow-elegant"
+    >
+      <img src={src} alt={activity.title} loading="lazy" className="h-32 w-full object-cover transition group-hover:scale-105" />
+      <div className="p-3">
+        <div className="text-[10px] font-bold uppercase tracking-wider text-primary">{activity.category}</div>
+        <div className="line-clamp-2 mt-0.5 font-display text-sm font-bold leading-tight">{activity.title}</div>
+        <div className="mt-1.5 text-xs text-muted-foreground">{activity.duration} · {activity.price} MAD</div>
+      </div>
+    </Link>
+  );
+}
