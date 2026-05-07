@@ -1,4 +1,6 @@
 import { Outlet, createRootRoute, HeadContent, Scripts, useLocation } from "@tanstack/react-router";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { useState } from "react";
 
 import appCss from "../styles.css?url";
 import { FiltersProvider } from "@/contexts/FiltersContext";
@@ -67,22 +69,25 @@ function RootShell({ children }: { children: React.ReactNode }) {
 function RootComponent() {
   const location = useLocation();
   const isAuthRoute = location.pathname.startsWith("/auth");
+  const [queryClient] = useState(() => new QueryClient());
 
   return (
-    <AuthProvider>
-      <FiltersProvider>
-        <AuthGate>
-          <div className="flex min-h-screen flex-col">
-            {!isAuthRoute && <Header />}
-            {!isAuthRoute && <CityConfirmBanner />}
-            <main className="flex-1">
-              <Outlet />
-            </main>
-            {!isAuthRoute && <Footer />}
-            {!isAuthRoute && <ChatbotWidget />}
-          </div>
-        </AuthGate>
-      </FiltersProvider>
-    </AuthProvider>
+    <QueryClientProvider client={queryClient}>
+      <AuthProvider>
+        <FiltersProvider>
+          <AuthGate>
+            <div className="flex min-h-screen flex-col">
+              {!isAuthRoute && <Header />}
+              {!isAuthRoute && <CityConfirmBanner />}
+              <main className="flex-1">
+                <Outlet />
+              </main>
+              {!isAuthRoute && <Footer />}
+              {!isAuthRoute && <ChatbotWidget />}
+            </div>
+          </AuthGate>
+        </FiltersProvider>
+      </AuthProvider>
+    </QueryClientProvider>
   );
 }
