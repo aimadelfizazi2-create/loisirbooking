@@ -2,6 +2,7 @@ import { Link } from "@tanstack/react-router";
 import { Star, Users, Clock, MapPin } from "lucide-react";
 import { type Activity, PRICE_TIERS } from "@/data/activities";
 import { CITIES } from "@/data/cities";
+import { useActivityImages } from "@/hooks/useActivityImages";
 
 const tierStyles: Record<Activity["tier"], string> = {
   budget: "bg-mint/15 text-foreground border-mint/40",
