@@ -2,6 +2,7 @@ import { Link } from "@tanstack/react-router";
 import { Star, Users, Clock, MapPin } from "lucide-react";
 import { type Activity, PRICE_TIERS } from "@/data/activities";
 import { CITIES } from "@/data/cities";
+import { useActivityImages } from "@/hooks/useActivityImages";
 
 const tierStyles: Record<Activity["tier"], string> = {
   budget: "bg-mint/15 text-foreground border-mint/40",
@@ -13,6 +14,8 @@ const tierStyles: Record<Activity["tier"], string> = {
 export function ActivityCard({ activity }: { activity: Activity }) {
   const city = CITIES.find((c) => c.id === activity.city);
   const tier = PRICE_TIERS.find((t) => t.id === activity.tier);
+  const { data: images } = useActivityImages(activity);
+  const heroSrc = images?.hero_url ?? activity.image;
 
   return (
     <Link
@@ -22,7 +25,7 @@ export function ActivityCard({ activity }: { activity: Activity }) {
     >
       <div className="relative aspect-[4/3] overflow-hidden">
         <img
-          src={activity.image}
+          src={heroSrc}
           alt={activity.title}
           loading="lazy"
           width={1024}

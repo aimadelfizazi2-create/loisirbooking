@@ -14,6 +14,39 @@ export type Database = {
   }
   public: {
     Tables: {
+      activity_images: {
+        Row: {
+          activity_id: string
+          created_at: string
+          gallery_urls: Json
+          hero_url: string
+          id: string
+          query: string
+          source: string
+          updated_at: string
+        }
+        Insert: {
+          activity_id: string
+          created_at?: string
+          gallery_urls?: Json
+          hero_url: string
+          id?: string
+          query: string
+          source: string
+          updated_at?: string
+        }
+        Update: {
+          activity_id?: string
+          created_at?: string
+          gallery_urls?: Json
+          hero_url?: string
+          id?: string
+          query?: string
+          source?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       partner_bookings: {
         Row: {
           activity_id: string
