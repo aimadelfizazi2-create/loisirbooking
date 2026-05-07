@@ -25,7 +25,7 @@ export function ActivityCard({ activity }: { activity: Activity }) {
     >
       <div className="relative aspect-[4/3] overflow-hidden">
         <img
-          src={activity.image}
+          src={heroSrc}
           alt={activity.title}
           loading="lazy"
           width={1024}
