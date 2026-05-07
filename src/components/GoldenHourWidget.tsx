@@ -87,19 +87,7 @@ export function GoldenHourWidget() {
 
           <div className="grid gap-3 sm:grid-cols-3">
             {suggestions.map((a) => (
-              <Link
-                key={a.id}
-                to="/activity/$id"
-                params={{ id: a.id }}
-                className="group relative overflow-hidden rounded-2xl bg-card shadow-soft transition hover:-translate-y-1 hover:shadow-elegant"
-              >
-                <img src={a.image} alt={a.title} className="h-32 w-full object-cover transition group-hover:scale-105" />
-                <div className="p-3">
-                  <div className="text-[10px] font-bold uppercase tracking-wider text-primary">{a.category}</div>
-                  <div className="line-clamp-2 mt-0.5 font-display text-sm font-bold leading-tight">{a.title}</div>
-                  <div className="mt-1.5 text-xs text-muted-foreground">{a.duration} · {a.price} MAD</div>
-                </div>
-              </Link>
+              <SuggestionCard key={a.id} activity={a} />
             ))}
           </div>
         </div>
