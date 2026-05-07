@@ -4,6 +4,7 @@ import { ACTIVITIES, PRICE_TIERS } from "@/data/activities";
 import { CITIES } from "@/data/cities";
 import { BookingDialog } from "@/components/BookingDialog";
 import { Star, Clock, Users, MapPin, Shield, Check, ArrowLeft } from "lucide-react";
+import { useActivityImages } from "@/hooks/useActivityImages";
 
 export const Route = createFileRoute("/activity/$id")({
   loader: ({ params }) => {
