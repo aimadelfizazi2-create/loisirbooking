@@ -38,6 +38,9 @@ function ActivityDetail() {
   const city = CITIES.find((c) => c.id === activity.city);
   const tier = PRICE_TIERS.find((t) => t.id === activity.tier);
   const [bookingOpen, setBookingOpen] = useState(false);
+  const { data: images } = useActivityImages(activity);
+  const heroSrc = images?.hero_url ?? activity.image;
+  const gallery = images?.gallery_urls ?? [];
 
   return (
     <div className="mx-auto max-w-6xl px-4 py-8 md:px-8 md:py-12">
@@ -47,9 +50,27 @@ function ActivityDetail() {
 
       <div className="grid gap-10 lg:grid-cols-3">
         <div className="lg:col-span-2">
-          <div className="overflow-hidden rounded-3xl shadow-elegant">
-            <img src={activity.image} alt={activity.title} width={1024} height={768} className="h-auto w-full object-cover" />
+          <div className="relative overflow-hidden rounded-3xl shadow-elegant">
+            <img src={heroSrc} alt={activity.title} width={1600} height={1000} loading="eager" className="h-auto w-full object-cover" />
+            <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent" />
           </div>
+
+          {gallery.length > 0 && (
+            <div className="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-4">
+              {gallery.slice(0, 4).map((url, i) => (
+                <div key={i} className="overflow-hidden rounded-2xl">
+                  <img
+                    src={url}
+                    alt={`${activity.title} — ${i + 1}`}
+                    loading="lazy"
+                    width={400}
+                    height={300}
+                    className="aspect-[4/3] h-full w-full object-cover transition hover:scale-105"
+                  />
+                </div>
+              ))}
+            </div>
+          )}
 
           <div className="mt-6 flex flex-wrap items-center gap-2 text-sm text-muted-foreground">
             <span className="flex items-center gap-1"><MapPin className="h-4 w-4" /> {city?.name}</span>
