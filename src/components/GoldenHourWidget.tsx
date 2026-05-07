@@ -2,7 +2,8 @@ import { useEffect, useMemo, useState } from "react";
 import { Link } from "@tanstack/react-router";
 import { Sun, Moon, Coffee, Wine, Sunrise } from "lucide-react";
 import { useFilters } from "@/contexts/FiltersContext";
-import { ACTIVITIES } from "@/data/activities";
+import { ACTIVITIES, type Activity } from "@/data/activities";
+import { useActivityImages } from "@/hooks/useActivityImages";
 
 type TimeSlot = {
   id: string;
