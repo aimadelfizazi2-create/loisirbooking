@@ -106,6 +106,8 @@ function DealCard({ deal, activity }: { deal: Deal; activity: typeof ACTIVITIES[
   const { h, m, s, expired } = useCountdown(deal.expiresAt);
   const city = CITIES.find((c) => c.id === activity.city);
   const newPrice = Math.round(activity.price * (1 - deal.discount / 100));
+  const { data: images } = useActivityImages(activity);
+  const heroSrc = images?.hero_url ?? activity.image;
 
   return (
     <article className="group relative overflow-hidden rounded-3xl border border-border bg-card shadow-soft transition hover:shadow-elegant">
