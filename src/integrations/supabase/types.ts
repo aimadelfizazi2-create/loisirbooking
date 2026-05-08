@@ -47,6 +47,33 @@ export type Database = {
         }
         Relationships: []
       }
+      lightning_messages: {
+        Row: {
+          created_at: string
+          group_id: string
+          id: string
+          message: string
+          user_id: string
+          user_name: string
+        }
+        Insert: {
+          created_at?: string
+          group_id: string
+          id?: string
+          message: string
+          user_id: string
+          user_name: string
+        }
+        Update: {
+          created_at?: string
+          group_id?: string
+          id?: string
+          message?: string
+          user_id?: string
+          user_name?: string
+        }
+        Relationships: []
+      }
       partner_bookings: {
         Row: {
           activity_id: string
@@ -149,6 +176,7 @@ export type Database = {
           id: string
           partner_activity_id: string | null
           partner_business_name: string | null
+          partner_description: string | null
           updated_at: string
           user_id: string
         }
@@ -160,6 +188,7 @@ export type Database = {
           id?: string
           partner_activity_id?: string | null
           partner_business_name?: string | null
+          partner_description?: string | null
           updated_at?: string
           user_id: string
         }
@@ -171,6 +200,7 @@ export type Database = {
           id?: string
           partner_activity_id?: string | null
           partner_business_name?: string | null
+          partner_description?: string | null
           updated_at?: string
           user_id?: string
         }

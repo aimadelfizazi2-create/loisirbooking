@@ -1,8 +1,9 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { ITINERARIES } from "@/data/itineraries";
 import { CITIES } from "@/data/cities";
-import { ACTIVITIES } from "@/data/activities";
+import { ACTIVITIES, type Activity } from "@/data/activities";
 import { Calendar, MapPin, Sparkles, ArrowRight, Gauge } from "lucide-react";
+import { useActivityImages } from "@/hooks/useActivityImages";
 
 export const Route = createFileRoute("/itineraries")({
   head: () => ({
@@ -103,12 +104,7 @@ function ItineraryCard({ id }: { id: string }) {
             </div>
             <div className="mt-2 flex gap-2 overflow-x-auto">
               {acts.map((a) => (
-                <img
-                  key={a!.id}
-                  src={a!.image}
-                  alt={a!.title}
-                  className="h-14 w-14 flex-shrink-0 rounded-xl object-cover"
-                />
+                <ItineraryThumb key={a!.id} activity={a!} />
               ))}
             </div>
           </div>
@@ -128,5 +124,18 @@ function ItineraryCard({ id }: { id: string }) {
         </div>
       </div>
     </Link>
+  );
+}
+
+function ItineraryThumb({ activity }: { activity: Activity }) {
+  const { data: images } = useActivityImages(activity);
+  const src = images?.hero_url ?? activity.image;
+  return (
+    <img
+      src={src}
+      alt={activity.title}
+      loading="lazy"
+      className="h-14 w-14 flex-shrink-0 rounded-xl object-cover"
+    />
   );
 }

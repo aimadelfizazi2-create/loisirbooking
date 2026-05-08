@@ -103,20 +103,41 @@ function PartnerDashboard({ partnerName, activityId }: { partnerName: string; ac
   const [bookings, setBookings] = useState<Booking[]>([]);
   const [slots, setSlots] = useState<Slot[]>([]);
   const [loading, setLoading] = useState(true);
+  const [tab, setTab] = useState<"planning" | "history" | "description">("planning");
+  const [description, setDescription] = useState<string>("");
+  const [savingDesc, setSavingDesc] = useState(false);
+  const [savedFlash, setSavedFlash] = useState(false);
   const activity = ACTIVITIES.find((x) => x.id === activityId);
 
   const load = async () => {
     setLoading(true);
-    const [{ data: b }, { data: s }] = await Promise.all([
+    const userRes = await supabase.auth.getUser();
+    const uid = userRes.data.user?.id;
+    const [{ data: b }, { data: s }, { data: prof }] = await Promise.all([
       supabase.from("partner_bookings").select("*").order("booking_date", { ascending: false }),
       supabase.from("partner_slots").select("*").order("slot_date", { ascending: true }).order("slot_time", { ascending: true }),
+      uid
+        ? supabase.from("profiles").select("partner_description").eq("user_id", uid).maybeSingle()
+        : Promise.resolve({ data: null }),
     ]);
     setBookings((b ?? []) as Booking[]);
     setSlots((s ?? []) as Slot[]);
+    setDescription(((prof as any)?.partner_description as string) ?? activity?.description ?? "");
     setLoading(false);
   };
 
   useEffect(() => { load(); }, []);
+
+  const saveDescription = async () => {
+    setSavingDesc(true);
+    const uid = (await supabase.auth.getUser()).data.user?.id;
+    if (uid) {
+      await supabase.from("profiles").update({ partner_description: description }).eq("user_id", uid);
+      setSavedFlash(true);
+      setTimeout(() => setSavedFlash(false), 2500);
+    }
+    setSavingDesc(false);
+  };
 
   const totalRevenue = bookings.reduce((s, b) => s + b.amount_mad, 0);
   const totalGuests = bookings.reduce((s, b) => s + b.guests, 0);
@@ -181,8 +202,30 @@ function PartnerDashboard({ partnerName, activityId }: { partnerName: string; ac
         </div>
       </section>
 
-      {/* Planning */}
+      {/* Tabs */}
       <section className="mx-auto mt-10 max-w-7xl px-4 md:px-8">
+        <div className="flex flex-wrap gap-2">
+          {([
+            ["planning", "Planning"],
+            ["history", "Historique des réservations"],
+            ["description", "Description de l'activité"],
+          ] as const).map(([k, label]) => (
+            <button
+              key={k}
+              onClick={() => setTab(k)}
+              className={`rounded-full px-4 py-2 text-sm font-semibold transition ${
+                tab === k ? "bg-foreground text-background" : "bg-secondary hover:bg-secondary/70"
+              }`}
+            >
+              {label}
+            </button>
+          ))}
+        </div>
+      </section>
+
+      {/* Planning */}
+      {tab === "planning" && (
+      <section className="mx-auto mt-6 max-w-7xl px-4 md:px-8">
         <div className="mb-4 flex items-center justify-between">
           <div>
             <h2 className="font-display text-2xl font-bold">Planning intelligent</h2>
@@ -254,8 +297,86 @@ function PartnerDashboard({ partnerName, activityId }: { partnerName: string; ac
           </table>
         </div>
       </section>
+      )}
+
+      {/* History tab */}
+      {tab === "history" && (
+        <section className="mx-auto mt-6 max-w-7xl px-4 md:px-8">
+          <div className="rounded-3xl border border-border bg-card p-6 shadow-soft">
+            <h2 className="font-display text-xl font-bold">Historique complet des réservations</h2>
+            <p className="mb-4 text-sm text-muted-foreground">Toutes les réservations passées et à venir.</p>
+            {bookings.length === 0 ? (
+              <p className="py-8 text-center text-sm text-muted-foreground">Aucune réservation pour le moment.</p>
+            ) : (
+              <div className="overflow-x-auto">
+                <table className="w-full text-sm">
+                  <thead className="bg-secondary/50 text-left text-xs uppercase tracking-wider text-muted-foreground">
+                    <tr>
+                      <th className="px-4 py-3">Date</th>
+                      <th className="px-4 py-3">Heure</th>
+                      <th className="px-4 py-3">Client</th>
+                      <th className="px-4 py-3">Pers.</th>
+                      <th className="px-4 py-3">Montant</th>
+                      <th className="px-4 py-3">Statut</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {bookings.map((b) => (
+                      <tr key={b.id} className="border-t border-border">
+                        <td className="px-4 py-3 font-medium">{new Date(b.booking_date).toLocaleDateString("fr-FR")}</td>
+                        <td className="px-4 py-3">{b.booking_time.slice(0, 5)}</td>
+                        <td className="px-4 py-3">{b.client_name}</td>
+                        <td className="px-4 py-3">{b.guests}</td>
+                        <td className="px-4 py-3 font-semibold text-primary">{b.amount_mad} MAD</td>
+                        <td className="px-4 py-3">
+                          <span className="inline-flex items-center gap-1 rounded-full bg-mint/30 px-2 py-0.5 text-[11px] font-bold uppercase">
+                            <CheckCircle2 className="h-3 w-3" /> {b.status}
+                          </span>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            )}
+          </div>
+        </section>
+      )}
+
+      {/* Description editor */}
+      {tab === "description" && (
+        <section className="mx-auto mt-6 max-w-3xl px-4 md:px-8">
+          <div className="rounded-3xl border border-border bg-card p-6 shadow-soft">
+            <h2 className="font-display text-xl font-bold">Description de mon activité</h2>
+            <p className="mb-4 text-sm text-muted-foreground">
+              Rédigez librement votre description. Elle sera visible par les clients.
+            </p>
+            <textarea
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
+              rows={10}
+              placeholder="Décrivez votre activité, ce qui la rend unique, ce que les clients vont vivre…"
+              className="w-full rounded-2xl border border-border bg-background p-4 text-sm outline-none focus:border-primary"
+            />
+            <div className="mt-3 flex items-center justify-between">
+              <span className="text-xs text-muted-foreground">{description.length} caractères</span>
+              <div className="flex items-center gap-3">
+                {savedFlash && <span className="text-xs font-semibold text-mint-foreground">✓ Enregistré</span>}
+                <button
+                  onClick={saveDescription}
+                  disabled={savingDesc}
+                  className="rounded-full bg-primary px-5 py-2 text-sm font-semibold text-primary-foreground hover:opacity-90 disabled:opacity-60"
+                >
+                  {savingDesc ? "Enregistrement…" : "Enregistrer"}
+                </button>
+              </div>
+            </div>
+          </div>
+        </section>
+      )}
 
       {/* Réservations + Analytics */}
+      {tab === "planning" && (
       <section className="mx-auto mt-10 grid max-w-7xl gap-6 px-4 md:grid-cols-3 md:px-8">
         <div className="md:col-span-2 rounded-3xl border border-border bg-card p-6 shadow-soft">
           <div className="mb-4 flex items-center justify-between">
@@ -302,6 +423,7 @@ function PartnerDashboard({ partnerName, activityId }: { partnerName: string; ac
           </div>
         </div>
       </section>
+      )}
     </div>
   );
 }

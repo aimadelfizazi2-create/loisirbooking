@@ -1,8 +1,10 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useEffect, useState } from "react";
-import { ACTIVITIES } from "@/data/activities";
+import { useEffect, useMemo, useState } from "react";
+import { ACTIVITIES, type Activity } from "@/data/activities";
 import { CITIES } from "@/data/cities";
 import { Zap, Clock, MapPin, TrendingDown, Flame } from "lucide-react";
+import { useFilters } from "@/contexts/FiltersContext";
+import { useActivityImages } from "@/hooks/useActivityImages";
 
 export const Route = createFileRoute("/flash-deals")({
   head: () => ({
@@ -24,15 +26,14 @@ type Deal = {
   spotsLeft: number;
 };
 
-function buildDeals(): Deal[] {
-  // Deterministic flash deals based on activity ids
-  const picks = ACTIVITIES.slice(0, 18);
+function buildDeals(activities: Activity[]): Deal[] {
+  const picks = activities.slice(0, 18);
   const now = Date.now();
   return picks.map((a, i) => ({
     id: `deal-${a.id}`,
     activityId: a.id,
     discount: [30, 40, 50, 35, 45, 60][i % 6],
-    expiresAt: now + (1 + (i % 9)) * 60 * 60 * 1000, // 1h to 9h
+    expiresAt: now + (1 + (i % 9)) * 60 * 60 * 1000,
     spotsLeft: 1 + (i % 7),
   }));
 }
@@ -51,7 +52,20 @@ function useCountdown(target: number) {
 }
 
 function FlashDealsPage() {
-  const [deals] = useState(() => buildDeals());
+  const f = useFilters();
+  const cityId = f.activeCity?.id;
+  const cityName = f.activeCity?.name;
+
+  const filteredActivities = useMemo(() => {
+    if (!cityId) return ACTIVITIES;
+    const local = ACTIVITIES.filter((a) => a.city === cityId);
+    return local.length >= 3 ? local : ACTIVITIES;
+  }, [cityId]);
+
+  const [deals, setDeals] = useState<Deal[]>(() => buildDeals(filteredActivities));
+  useEffect(() => {
+    setDeals(buildDeals(filteredActivities));
+  }, [filteredActivities]);
 
   return (
     <div className="mx-auto max-w-7xl px-4 py-10 md:px-8 md:py-14">
@@ -68,13 +82,13 @@ function FlashDealsPage() {
           Flash <span className="italic">Deals</span>
         </h1>
         <p className="mt-4 max-w-2xl text-base text-white/90 md:text-lg">
-          Les prestataires libèrent leurs créneaux invendus à prix cassés.
-          Jusqu'à <strong>-60 %</strong> sur les expériences du jour, géolocalisées autour de toi.
+          {cityName ? <>Offres flash autour de <strong>{cityName}</strong>. </> : null}
+          Jusqu'à <strong>-60 %</strong> sur les créneaux invendus du jour.
         </p>
         <div className="mt-6 flex flex-wrap gap-3 text-sm">
-          <span className="rounded-full bg-white/15 px-4 py-2 backdrop-blur">⚡ Inspiré du revenue hôtelier</span>
-          <span className="rounded-full bg-white/15 px-4 py-2 backdrop-blur">📍 Autour de toi</span>
-          <span className="rounded-full bg-white/15 px-4 py-2 backdrop-blur">⏱ Expire en quelques heures</span>
+          <span className="rounded-full bg-white/15 px-4 py-2 backdrop-blur">⚡ Yield management</span>
+          <span className="rounded-full bg-white/15 px-4 py-2 backdrop-blur">📍 {cityName ?? "Autour de toi"}</span>
+          <span className="rounded-full bg-white/15 px-4 py-2 backdrop-blur">⏱ Expire bientôt</span>
         </div>
       </div>
 
@@ -92,6 +106,8 @@ function DealCard({ deal, activity }: { deal: Deal; activity: typeof ACTIVITIES[
   const { h, m, s, expired } = useCountdown(deal.expiresAt);
   const city = CITIES.find((c) => c.id === activity.city);
   const newPrice = Math.round(activity.price * (1 - deal.discount / 100));
+  const { data: images } = useActivityImages(activity);
+  const heroSrc = images?.hero_url ?? activity.image;
 
   return (
     <article className="group relative overflow-hidden rounded-3xl border border-border bg-card shadow-soft transition hover:shadow-elegant">
@@ -105,8 +121,9 @@ function DealCard({ deal, activity }: { deal: Deal; activity: typeof ACTIVITIES[
       </div>
       <div className="aspect-[4/3] overflow-hidden">
         <img
-          src={activity.image}
+          src={heroSrc}
           alt={activity.title}
+          loading="lazy"
           className="h-full w-full object-cover transition duration-500 group-hover:scale-105"
         />
       </div>
