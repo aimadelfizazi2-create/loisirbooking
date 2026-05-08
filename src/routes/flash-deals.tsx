@@ -1,8 +1,10 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useEffect, useState } from "react";
-import { ACTIVITIES } from "@/data/activities";
+import { useEffect, useMemo, useState } from "react";
+import { ACTIVITIES, type Activity } from "@/data/activities";
 import { CITIES } from "@/data/cities";
 import { Zap, Clock, MapPin, TrendingDown, Flame } from "lucide-react";
+import { useFilters } from "@/contexts/FiltersContext";
+import { useActivityImages } from "@/hooks/useActivityImages";
 
 export const Route = createFileRoute("/flash-deals")({
   head: () => ({
