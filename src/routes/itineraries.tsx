@@ -1,8 +1,9 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { ITINERARIES } from "@/data/itineraries";
 import { CITIES } from "@/data/cities";
-import { ACTIVITIES } from "@/data/activities";
+import { ACTIVITIES, type Activity } from "@/data/activities";
 import { Calendar, MapPin, Sparkles, ArrowRight, Gauge } from "lucide-react";
+import { useActivityImages } from "@/hooks/useActivityImages";
 
 export const Route = createFileRoute("/itineraries")({
   head: () => ({
