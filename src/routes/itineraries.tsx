@@ -104,12 +104,7 @@ function ItineraryCard({ id }: { id: string }) {
             </div>
             <div className="mt-2 flex gap-2 overflow-x-auto">
               {acts.map((a) => (
-                <img
-                  key={a!.id}
-                  src={a!.image}
-                  alt={a!.title}
-                  className="h-14 w-14 flex-shrink-0 rounded-xl object-cover"
-                />
+                <ItineraryThumb key={a!.id} activity={a!} />
               ))}
             </div>
           </div>
