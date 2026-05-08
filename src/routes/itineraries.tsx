@@ -126,3 +126,16 @@ function ItineraryCard({ id }: { id: string }) {
     </Link>
   );
 }
+
+function ItineraryThumb({ activity }: { activity: Activity }) {
+  const { data: images } = useActivityImages(activity);
+  const src = images?.hero_url ?? activity.image;
+  return (
+    <img
+      src={src}
+      alt={activity.title}
+      loading="lazy"
+      className="h-14 w-14 flex-shrink-0 rounded-xl object-cover"
+    />
+  );
+}
