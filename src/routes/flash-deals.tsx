@@ -121,7 +121,7 @@ function DealCard({ deal, activity }: { deal: Deal; activity: typeof ACTIVITIES[
       </div>
       <div className="aspect-[4/3] overflow-hidden">
         <img
-          src={useActivityImages(activity).data?.hero_url ?? activity.image}
+          src={heroSrc}
           alt={activity.title}
           loading="lazy"
           className="h-full w-full object-cover transition duration-500 group-hover:scale-105"
