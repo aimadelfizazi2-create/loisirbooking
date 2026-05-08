@@ -423,6 +423,7 @@ function PartnerDashboard({ partnerName, activityId }: { partnerName: string; ac
           </div>
         </div>
       </section>
+      )}
     </div>
   );
 }
