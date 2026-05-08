@@ -202,8 +202,30 @@ function PartnerDashboard({ partnerName, activityId }: { partnerName: string; ac
         </div>
       </section>
 
-      {/* Planning */}
+      {/* Tabs */}
       <section className="mx-auto mt-10 max-w-7xl px-4 md:px-8">
+        <div className="flex flex-wrap gap-2">
+          {([
+            ["planning", "Planning"],
+            ["history", "Historique des réservations"],
+            ["description", "Description de l'activité"],
+          ] as const).map(([k, label]) => (
+            <button
+              key={k}
+              onClick={() => setTab(k)}
+              className={`rounded-full px-4 py-2 text-sm font-semibold transition ${
+                tab === k ? "bg-foreground text-background" : "bg-secondary hover:bg-secondary/70"
+              }`}
+            >
+              {label}
+            </button>
+          ))}
+        </div>
+      </section>
+
+      {/* Planning */}
+      {tab === "planning" && (
+      <section className="mx-auto mt-6 max-w-7xl px-4 md:px-8">
         <div className="mb-4 flex items-center justify-between">
           <div>
             <h2 className="font-display text-2xl font-bold">Planning intelligent</h2>
