@@ -103,20 +103,41 @@ function PartnerDashboard({ partnerName, activityId }: { partnerName: string; ac
   const [bookings, setBookings] = useState<Booking[]>([]);
   const [slots, setSlots] = useState<Slot[]>([]);
   const [loading, setLoading] = useState(true);
+  const [tab, setTab] = useState<"planning" | "history" | "description">("planning");
+  const [description, setDescription] = useState<string>("");
+  const [savingDesc, setSavingDesc] = useState(false);
+  const [savedFlash, setSavedFlash] = useState(false);
   const activity = ACTIVITIES.find((x) => x.id === activityId);
 
   const load = async () => {
     setLoading(true);
-    const [{ data: b }, { data: s }] = await Promise.all([
+    const userRes = await supabase.auth.getUser();
+    const uid = userRes.data.user?.id;
+    const [{ data: b }, { data: s }, { data: prof }] = await Promise.all([
       supabase.from("partner_bookings").select("*").order("booking_date", { ascending: false }),
       supabase.from("partner_slots").select("*").order("slot_date", { ascending: true }).order("slot_time", { ascending: true }),
+      uid
+        ? supabase.from("profiles").select("partner_description").eq("user_id", uid).maybeSingle()
+        : Promise.resolve({ data: null }),
     ]);
     setBookings((b ?? []) as Booking[]);
     setSlots((s ?? []) as Slot[]);
+    setDescription(((prof as any)?.partner_description as string) ?? activity?.description ?? "");
     setLoading(false);
   };
 
   useEffect(() => { load(); }, []);
+
+  const saveDescription = async () => {
+    setSavingDesc(true);
+    const uid = (await supabase.auth.getUser()).data.user?.id;
+    if (uid) {
+      await supabase.from("profiles").update({ partner_description: description }).eq("user_id", uid);
+      setSavedFlash(true);
+      setTimeout(() => setSavedFlash(false), 2500);
+    }
+    setSavingDesc(false);
+  };
 
   const totalRevenue = bookings.reduce((s, b) => s + b.amount_mad, 0);
   const totalGuests = bookings.reduce((s, b) => s + b.guests, 0);
