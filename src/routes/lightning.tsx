@@ -82,7 +82,8 @@ function LightningPage() {
             Lightning <span className="italic text-primary">Matching</span>
           </h1>
           <p className="mt-4 max-w-xl text-muted-foreground md:text-lg">
-            Voyager seul, partager à plusieurs. Rejoins ou crée un groupe éphémère pour
+            Voyager seul, partager à plusieurs. Rejoins ou crée un groupe éphémère
+            {cityName ? <> autour de <strong>{cityName}</strong></> : null} pour
             vivre la même activité avec d'autres explorateurs.
           </p>
           <div className="mt-6 flex flex-wrap gap-2">
