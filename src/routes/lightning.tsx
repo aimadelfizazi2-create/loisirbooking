@@ -34,8 +34,8 @@ type Group = {
 
 const AVATARS = ["🧗‍♀️", "🧘‍♂️", "🏄‍♀️", "👨‍🍳", "🏇", "🚴‍♀️", "🎨", "🎭", "🪂", "🐪"];
 
-function buildGroups(): Group[] {
-  return ACTIVITIES.slice(0, 24).map((a, i) => ({
+function buildGroups(activities: Activity[]): Group[] {
+  return activities.slice(0, 24).map((a, i) => ({
     id: `grp-${a.id}`,
     activityId: a.id,
     host: ["Yasmine", "Karim", "Sofia", "Mehdi", "Léa", "Ayoub", "Amina", "Tariq"][i % 8],
@@ -49,8 +49,20 @@ function buildGroups(): Group[] {
 }
 
 function LightningPage() {
-  const [groups] = useState(() => buildGroups());
+  const f = useFilters();
+  const cityId = f.activeCity?.id;
+  const cityName = f.activeCity?.name;
+  const localActivities = useMemo(() => {
+    if (!cityId) return ACTIVITIES;
+    const local = ACTIVITIES.filter((a) => a.city === cityId);
+    return local.length >= 3 ? local : ACTIVITIES;
+  }, [cityId]);
+
+  const [groups, setGroups] = useState<Group[]>(() => buildGroups(localActivities));
+  useEffect(() => { setGroups(buildGroups(localActivities)); }, [localActivities]);
+
   const [filter, setFilter] = useState<"all" | "open" | "starting">("all");
+  const [chatGroupId, setChatGroupId] = useState<string | null>(null);
 
   const filtered = groups.filter((g) => {
     if (filter === "open") return g.current < g.capacity;
