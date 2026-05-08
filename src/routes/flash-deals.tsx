@@ -26,15 +26,14 @@ type Deal = {
   spotsLeft: number;
 };
 
-function buildDeals(): Deal[] {
-  // Deterministic flash deals based on activity ids
-  const picks = ACTIVITIES.slice(0, 18);
+function buildDeals(activities: Activity[]): Deal[] {
+  const picks = activities.slice(0, 18);
   const now = Date.now();
   return picks.map((a, i) => ({
     id: `deal-${a.id}`,
     activityId: a.id,
     discount: [30, 40, 50, 35, 45, 60][i % 6],
-    expiresAt: now + (1 + (i % 9)) * 60 * 60 * 1000, // 1h to 9h
+    expiresAt: now + (1 + (i % 9)) * 60 * 60 * 1000,
     spotsLeft: 1 + (i % 7),
   }));
 }
