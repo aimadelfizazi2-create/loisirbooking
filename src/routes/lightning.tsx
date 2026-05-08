@@ -1,8 +1,12 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useState } from "react";
-import { ACTIVITIES } from "@/data/activities";
+import { useEffect, useMemo, useRef, useState } from "react";
+import { ACTIVITIES, type Activity } from "@/data/activities";
 import { CITIES } from "@/data/cities";
-import { Zap, Users, Clock, MapPin, MessageCircle, Plus } from "lucide-react";
+import { Zap, Users, Clock, MapPin, MessageCircle, Plus, Send, X } from "lucide-react";
+import { useFilters } from "@/contexts/FiltersContext";
+import { useActivityImages } from "@/hooks/useActivityImages";
+import { useAuth } from "@/contexts/AuthContext";
+import { supabase } from "@/integrations/supabase/client";
 
 export const Route = createFileRoute("/lightning")({
   head: () => ({
