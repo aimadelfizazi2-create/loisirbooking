@@ -52,7 +52,20 @@ function useCountdown(target: number) {
 }
 
 function FlashDealsPage() {
-  const [deals] = useState(() => buildDeals());
+  const f = useFilters();
+  const cityId = f.activeCity?.id;
+  const cityName = f.activeCity?.name;
+
+  const filteredActivities = useMemo(() => {
+    if (!cityId) return ACTIVITIES;
+    const local = ACTIVITIES.filter((a) => a.city === cityId);
+    return local.length >= 3 ? local : ACTIVITIES;
+  }, [cityId]);
+
+  const [deals, setDeals] = useState<Deal[]>(() => buildDeals(filteredActivities));
+  useEffect(() => {
+    setDeals(buildDeals(filteredActivities));
+  }, [filteredActivities]);
 
   return (
     <div className="mx-auto max-w-7xl px-4 py-10 md:px-8 md:py-14">
@@ -69,13 +82,13 @@ function FlashDealsPage() {
           Flash <span className="italic">Deals</span>
         </h1>
         <p className="mt-4 max-w-2xl text-base text-white/90 md:text-lg">
-          Les prestataires libèrent leurs créneaux invendus à prix cassés.
-          Jusqu'à <strong>-60 %</strong> sur les expériences du jour, géolocalisées autour de toi.
+          {cityName ? <>Offres flash autour de <strong>{cityName}</strong>. </> : null}
+          Jusqu'à <strong>-60 %</strong> sur les créneaux invendus du jour.
         </p>
         <div className="mt-6 flex flex-wrap gap-3 text-sm">
-          <span className="rounded-full bg-white/15 px-4 py-2 backdrop-blur">⚡ Inspiré du revenue hôtelier</span>
-          <span className="rounded-full bg-white/15 px-4 py-2 backdrop-blur">📍 Autour de toi</span>
-          <span className="rounded-full bg-white/15 px-4 py-2 backdrop-blur">⏱ Expire en quelques heures</span>
+          <span className="rounded-full bg-white/15 px-4 py-2 backdrop-blur">⚡ Yield management</span>
+          <span className="rounded-full bg-white/15 px-4 py-2 backdrop-blur">📍 {cityName ?? "Autour de toi"}</span>
+          <span className="rounded-full bg-white/15 px-4 py-2 backdrop-blur">⏱ Expire bientôt</span>
         </div>
       </div>
 
