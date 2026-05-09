@@ -53,9 +53,10 @@ function LightningPage() {
   const cityId = f.activeCity?.id;
   const cityName = f.activeCity?.name;
   const localActivities = useMemo(() => {
-    if (!cityId) return ACTIVITIES;
-    const local = ACTIVITIES.filter((a) => a.city === cityId);
-    return local.length >= 3 ? local : ACTIVITIES;
+    const eligible = ACTIVITIES.filter((a) => a.lightning);
+    if (!cityId) return eligible;
+    const local = eligible.filter((a) => a.city === cityId);
+    return local.length >= 2 ? local : eligible;
   }, [cityId]);
 
   const [groups, setGroups] = useState<Group[]>(() => buildGroups(localActivities));

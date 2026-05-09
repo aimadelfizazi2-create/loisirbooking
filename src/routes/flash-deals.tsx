@@ -1,6 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useMemo, useState } from "react";
-import { ACTIVITIES, type Activity } from "@/data/activities";
+import { ACTIVITIES, type Activity, getEffectivePrice } from "@/data/activities";
 import { CITIES } from "@/data/cities";
 import { Zap, Clock, MapPin, TrendingDown, Flame } from "lucide-react";
 import { useFilters } from "@/contexts/FiltersContext";
@@ -10,32 +10,24 @@ export const Route = createFileRoute("/flash-deals")({
   head: () => ({
     meta: [
       { title: "Flash Deals — Offres dernière minute au Maroc | LoisirBooking" },
-      { name: "description", content: "Activités à prix cassés : -30 % à -60 % sur les créneaux invendus du jour. Yield management automatisé pour les artisans locaux." },
-      { property: "og:title", content: "Flash Deals — Jusqu'à -60 % sur vos loisirs" },
-      { property: "og:description", content: "Offres flash géolocalisées sur les créneaux invendus." },
+      { name: "description", content: "Activités à prix cassés : -20% à -40% sur les créneaux invendus du jour. Yield management automatisé." },
     ],
   }),
   component: FlashDealsPage,
 });
 
-type Deal = {
-  id: string;
-  activityId: string;
-  discount: number;
-  expiresAt: number;
-  spotsLeft: number;
-};
+type Deal = { id: string; activity: Activity; expiresAt: number; spotsLeft: number };
 
 function buildDeals(activities: Activity[]): Deal[] {
-  const picks = activities.slice(0, 18);
   const now = Date.now();
-  return picks.map((a, i) => ({
-    id: `deal-${a.id}`,
-    activityId: a.id,
-    discount: [30, 40, 50, 35, 45, 60][i % 6],
-    expiresAt: now + (1 + (i % 9)) * 60 * 60 * 1000,
-    spotsLeft: 1 + (i % 7),
-  }));
+  return activities
+    .filter((a) => a.flashDeal)
+    .map((a, i) => ({
+      id: `deal-${a.id}`,
+      activity: a,
+      expiresAt: now + (1 + (i % 9)) * 60 * 60 * 1000,
+      spotsLeft: 1 + (i % 7),
+    }));
 }
 
 function useCountdown(target: number) {
@@ -57,15 +49,14 @@ function FlashDealsPage() {
   const cityName = f.activeCity?.name;
 
   const filteredActivities = useMemo(() => {
-    if (!cityId) return ACTIVITIES;
-    const local = ACTIVITIES.filter((a) => a.city === cityId);
-    return local.length >= 3 ? local : ACTIVITIES;
+    const all = ACTIVITIES.filter((a) => !!a.flashDeal);
+    if (!cityId) return all;
+    const local = all.filter((a) => a.city === cityId);
+    return local.length >= 2 ? local : all;
   }, [cityId]);
 
   const [deals, setDeals] = useState<Deal[]>(() => buildDeals(filteredActivities));
-  useEffect(() => {
-    setDeals(buildDeals(filteredActivities));
-  }, [filteredActivities]);
+  useEffect(() => { setDeals(buildDeals(filteredActivities)); }, [filteredActivities]);
 
   return (
     <div className="mx-auto max-w-7xl px-4 py-10 md:px-8 md:py-14">
@@ -83,78 +74,68 @@ function FlashDealsPage() {
         </h1>
         <p className="mt-4 max-w-2xl text-base text-white/90 md:text-lg">
           {cityName ? <>Offres flash autour de <strong>{cityName}</strong>. </> : null}
-          Jusqu'à <strong>-60 %</strong> sur les créneaux invendus du jour.
+          Réductions <strong>réelles</strong> sur une sélection d'activités — appliquées automatiquement à la réservation.
         </p>
         <div className="mt-6 flex flex-wrap gap-3 text-sm">
-          <span className="rounded-full bg-white/15 px-4 py-2 backdrop-blur">⚡ Yield management</span>
+          <span className="rounded-full bg-white/15 px-4 py-2 backdrop-blur">⚡ {deals.length} deals</span>
           <span className="rounded-full bg-white/15 px-4 py-2 backdrop-blur">📍 {cityName ?? "Autour de toi"}</span>
           <span className="rounded-full bg-white/15 px-4 py-2 backdrop-blur">⏱ Expire bientôt</span>
         </div>
       </div>
 
-      <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-        {deals.map((d) => {
-          const a = ACTIVITIES.find((x) => x.id === d.activityId)!;
-          return <DealCard key={d.id} deal={d} activity={a} />;
-        })}
-      </div>
+      {deals.length === 0 ? (
+        <div className="rounded-3xl border border-dashed border-border bg-card/50 p-12 text-center">
+          <h3 className="font-display text-xl font-semibold">Aucun Flash Deal pour le moment</h3>
+          <p className="mt-2 text-sm text-muted-foreground">Reviens plus tard, les créneaux invendus apparaîtront ici.</p>
+        </div>
+      ) : (
+        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+          {deals.map((d) => <DealCard key={d.id} deal={d} />)}
+        </div>
+      )}
     </div>
   );
 }
 
-function DealCard({ deal, activity }: { deal: Deal; activity: typeof ACTIVITIES[number] }) {
+function DealCard({ deal }: { deal: Deal }) {
   const { h, m, s, expired } = useCountdown(deal.expiresAt);
-  const city = CITIES.find((c) => c.id === activity.city);
-  const newPrice = Math.round(activity.price * (1 - deal.discount / 100));
-  const { data: images } = useActivityImages(activity);
-  const heroSrc = images?.hero_url ?? activity.image;
+  const a = deal.activity;
+  const city = CITIES.find((c) => c.id === a.city);
+  const newPrice = getEffectivePrice(a);
+  const discount = a.flashDeal!.discountPct;
+  const { data: images } = useActivityImages(a);
+  const heroSrc = images?.hero_url ?? a.image;
 
   return (
     <article className="group relative overflow-hidden rounded-3xl border border-border bg-card shadow-soft transition hover:shadow-elegant">
       <div className="absolute left-4 top-4 z-10 flex items-center gap-1.5 rounded-full bg-destructive px-3 py-1.5 text-xs font-bold text-destructive-foreground shadow-elegant">
         <TrendingDown className="h-3.5 w-3.5" />
-        −{deal.discount}%
+        −{discount}%
       </div>
       <div className="absolute right-4 top-4 z-10 flex items-center gap-1.5 rounded-full bg-background/95 px-3 py-1.5 text-xs font-semibold backdrop-blur">
         <Zap className="h-3.5 w-3.5 text-accent" />
         {deal.spotsLeft} place{deal.spotsLeft > 1 ? "s" : ""}
       </div>
       <div className="aspect-[4/3] overflow-hidden">
-        <img
-          src={heroSrc}
-          alt={activity.title}
-          loading="lazy"
-          className="h-full w-full object-cover transition duration-500 group-hover:scale-105"
-        />
+        <img src={heroSrc} alt={a.title} loading="lazy" className="h-full w-full object-cover transition duration-500 group-hover:scale-105" />
       </div>
       <div className="p-5">
         <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
           <MapPin className="h-3 w-3" />
-          {city?.name} · {activity.category}
+          {city?.name} · {a.category}
         </div>
-        <h3 className="mt-2 line-clamp-2 font-display text-lg font-bold">{activity.title}</h3>
-        <div
-          className={`mt-3 flex items-center gap-2 rounded-xl px-3 py-2 text-sm font-mono tabular-nums ${expired ? "bg-muted text-muted-foreground" : "bg-destructive/10 text-destructive"}`}
-        >
+        <h3 className="mt-2 line-clamp-2 font-display text-lg font-bold">{a.title}</h3>
+        <p className="mt-1 text-xs text-muted-foreground italic">{a.flashDeal!.reason}</p>
+        <div className={`mt-3 flex items-center gap-2 rounded-xl px-3 py-2 text-sm font-mono tabular-nums ${expired ? "bg-muted text-muted-foreground" : "bg-destructive/10 text-destructive"}`}>
           <Clock className="h-4 w-4" />
-          {expired ? (
-            "Expiré"
-          ) : (
-            <span>
-              {String(h).padStart(2, "0")}:{String(m).padStart(2, "0")}:{String(s).padStart(2, "0")}
-            </span>
-          )}
+          {expired ? "Expiré" : <span>{String(h).padStart(2,"0")}:{String(m).padStart(2,"0")}:{String(s).padStart(2,"0")}</span>}
         </div>
         <div className="mt-4 flex items-end justify-between">
           <div>
-            <div className="text-xs text-muted-foreground line-through">{activity.price} MAD</div>
+            <div className="text-xs text-muted-foreground line-through">{a.price} MAD</div>
             <div className="font-display text-2xl font-bold text-primary">{newPrice} MAD</div>
           </div>
-          <Link
-            to="/activity/$id"
-            params={{ id: activity.id }}
-            className="rounded-full bg-foreground px-4 py-2 text-xs font-semibold text-background transition hover:opacity-90"
-          >
+          <Link to="/activity/$id" params={{ id: a.id }} className="rounded-full bg-foreground px-4 py-2 text-xs font-semibold text-background transition hover:opacity-90">
             Réserver
           </Link>
         </div>

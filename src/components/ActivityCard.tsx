@@ -1,6 +1,6 @@
 import { Link } from "@tanstack/react-router";
-import { Star, Users, Clock, MapPin } from "lucide-react";
-import { type Activity, PRICE_TIERS } from "@/data/activities";
+import { Star, Users, Clock, MapPin, Zap, TrendingDown } from "lucide-react";
+import { type Activity, PRICE_TIERS, getEffectivePrice } from "@/data/activities";
 import { CITIES } from "@/data/cities";
 import { useActivityImages } from "@/hooks/useActivityImages";
 
@@ -33,6 +33,16 @@ export function ActivityCard({ activity }: { activity: Activity }) {
           className="h-full w-full object-cover transition duration-500 group-hover:scale-105"
         />
         <div className="absolute left-3 top-3 flex flex-wrap gap-1.5">
+          {activity.flashDeal && (
+            <span className="inline-flex items-center gap-1 rounded-full bg-destructive px-2.5 py-1 text-[11px] font-bold text-destructive-foreground shadow">
+              <TrendingDown className="h-3 w-3" /> -{activity.flashDeal.discountPct}%
+            </span>
+          )}
+          {activity.lightning && (
+            <span className="inline-flex items-center gap-1 rounded-full bg-zellige px-2.5 py-1 text-[11px] font-bold text-white shadow">
+              <Zap className="h-3 w-3" /> Lightning
+            </span>
+          )}
           <span className={`rounded-full border px-2.5 py-1 text-[11px] font-semibold backdrop-blur-md ${tierStyles[activity.tier]}`}>
             {tier?.label}
           </span>
@@ -70,9 +80,18 @@ export function ActivityCard({ activity }: { activity: Activity }) {
           </div>
           <div className="text-right">
             <div className="text-[10px] uppercase text-muted-foreground">à partir de</div>
-            <div className="font-display text-xl font-bold text-primary">
-              {activity.price} <span className="text-xs font-normal">MAD</span>
-            </div>
+            {activity.flashDeal ? (
+              <div className="flex items-baseline gap-1.5">
+                <span className="text-xs text-muted-foreground line-through">{activity.price}</span>
+                <span className="font-display text-xl font-bold text-destructive">
+                  {getEffectivePrice(activity)} <span className="text-xs font-normal">MAD</span>
+                </span>
+              </div>
+            ) : (
+              <div className="font-display text-xl font-bold text-primary">
+                {activity.price} <span className="text-xs font-normal">MAD</span>
+              </div>
+            )}
           </div>
         </div>
       </div>
