@@ -74,6 +74,60 @@ export type Database = {
         }
         Relationships: []
       }
+      partner_activities: {
+        Row: {
+          category: string
+          city: string
+          created_at: string
+          description: string
+          duration: string
+          gallery_urls: Json
+          hero_url: string | null
+          id: string
+          is_active: boolean
+          max_group: number
+          name: string
+          price_mad: number
+          short: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          category: string
+          city: string
+          created_at?: string
+          description?: string
+          duration?: string
+          gallery_urls?: Json
+          hero_url?: string | null
+          id?: string
+          is_active?: boolean
+          max_group?: number
+          name: string
+          price_mad?: number
+          short?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          category?: string
+          city?: string
+          created_at?: string
+          description?: string
+          duration?: string
+          gallery_urls?: Json
+          hero_url?: string | null
+          id?: string
+          is_active?: boolean
+          max_group?: number
+          name?: string
+          price_mad?: number
+          short?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       partner_bookings: {
         Row: {
           activity_id: string
