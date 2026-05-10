@@ -1,0 +1,1 @@
+DELETE FROM public.activity_images WHERE activity_id IN ('tng-3','tng-1','tng-2','tng-5','tng-6','tng-7','tng-8','tng-9','tng-10');
