@@ -45,14 +45,22 @@ export function GoldenHourWidget() {
 
   const suggestions = useMemo(() => {
     const cityFilter = f.activeCity?.id;
-    let pool = ACTIVITIES.filter((a) => {
-      if (cityFilter && a.city !== cityFilter) return false;
+    const inCity = (a: Activity) => !cityFilter || a.city === cityFilter;
+    const matchSlot = (a: Activity) => {
       if (current.prefer !== "any" && a.weather !== current.prefer && a.weather !== "any") return false;
       return current.moods.some((m) => a.moods.includes(m));
-    });
-    // Fallback if not enough in city
+    };
+    // 1. Strict: city + slot
+    let pool = ACTIVITIES.filter((a) => inCity(a) && matchSlot(a));
+    // 2. Relax slot but KEEP city (priorité ville)
+    if (pool.length < 3 && cityFilter) {
+      const extra = ACTIVITIES.filter((a) => inCity(a) && !pool.includes(a));
+      pool = [...pool, ...extra];
+    }
+    // 3. Last resort: any city matching slot
     if (pool.length < 3) {
-      pool = ACTIVITIES.filter((a) => current.moods.some((m) => a.moods.includes(m)));
+      const extra = ACTIVITIES.filter((a) => matchSlot(a) && !pool.includes(a));
+      pool = [...pool, ...extra];
     }
     return pool.slice(0, 3);
   }, [current, f.activeCity]);

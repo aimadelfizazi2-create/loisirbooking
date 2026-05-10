@@ -205,7 +205,7 @@ export const ACTIVITIES: Activity[] = [
     "Sur les traces de Bowles et des Rolling Stones.",
     "Visite guidée littéraire de la Médina, thé au mythique café Hafa.",
     "Tanger Stories", 10, "outdoor",
-    { imageKeywords: "tangier medina kasbah old town morocco rooftop sea",
+    { imageKeywords: "tangier old medina narrow street arch morocco daylight",
       flashDeal: { discountPct: 30, reason: "Visite samedi dispo" }, lightning: true }),
   a("tng-4", "Plongée à la grotte sous-marine", "tanger", "Sport",
     ["#AventureForte", "#BesoinDeTranspirer"], "3h", 650, 4.7, 134, img.surf,
