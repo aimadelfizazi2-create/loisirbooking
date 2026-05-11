@@ -108,6 +108,11 @@ function ActivityDetail() {
           </h1>
 
           <div className="mt-4 flex flex-wrap gap-2">
+            {activity.lightning && (
+              <span className="inline-flex items-center gap-1 rounded-full bg-accent/20 px-3 py-1 text-sm font-bold text-accent-foreground">
+                <Zap className="h-3.5 w-3.5" /> Lightning Match
+              </span>
+            )}
             {activity.moods.map((m: string) => (
               <span key={m} className="rounded-full bg-primary/10 px-3 py-1 text-sm font-medium text-primary">{m}</span>
             ))}
