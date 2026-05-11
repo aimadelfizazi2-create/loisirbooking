@@ -36,7 +36,8 @@ export function BookingDialog({ activity, open, onClose }: Props) {
 
   if (!open) return null;
 
-  const total = activity.price * guests;
+  const unitPrice = getEffectivePrice(activity);
+  const total = unitPrice * guests;
 
   const handleConfirm = async () => {
     if (!user) {
