@@ -243,7 +243,20 @@ export function BookingDialog({ activity, open, onClose }: Props) {
 
             <div className="mt-6 rounded-2xl bg-secondary/40 p-4 text-sm">
               <div className="flex items-center justify-between">
-                <span className="text-muted-foreground">{activity.price} MAD × {guests}</span>
+                <span className="text-muted-foreground">
+                  {activity.flashDeal ? (
+                    <>
+                      <span className="line-through opacity-60">{activity.price}</span>{" "}
+                      <span className="font-semibold text-destructive">{unitPrice} MAD</span>
+                      <span className="ml-1 rounded-full bg-destructive/15 px-1.5 py-0.5 text-[10px] font-bold text-destructive">
+                        −{activity.flashDeal.discountPct}%
+                      </span>
+                      {" × "}{guests}
+                    </>
+                  ) : (
+                    <>{unitPrice} MAD × {guests}</>
+                  )}
+                </span>
                 <span className="font-semibold">{total} MAD</span>
               </div>
               <div className="mt-2 flex items-center justify-between border-t border-border/60 pt-2">
