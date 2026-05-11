@@ -3,7 +3,7 @@ import { QRCodeSVG } from "qrcode.react";
 import { useNavigate } from "@tanstack/react-router";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
-import type { Activity } from "@/data/activities";
+import { getEffectivePrice, type Activity } from "@/data/activities";
 import { X, Calendar, Clock, Users, CheckCircle2, Loader2, Mail, Phone, Download } from "lucide-react";
 
 type Props = { activity: Activity; open: boolean; onClose: () => void };
