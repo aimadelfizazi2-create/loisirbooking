@@ -24,14 +24,28 @@ export const Route = createFileRoute("/")({
 
 function HomePage() {
   const { isPartner } = useAuth();
+  const { activeCity } = useFilters();
+  const cityName = activeCity?.name;
+  // pick a representative activity from the active city for the hero image
+  const cityActivity = activeCity
+    ? ACTIVITIES.find((a) => a.city === activeCity.id)
+    : undefined;
+  const { data: cityImg } = useActivityImages(
+    cityActivity ?? ACTIVITIES[0]
+  );
+  const heroSrc = activeCity && cityImg?.hero_url ? cityImg.hero_url : heroImg;
+  const heroAlt = cityName
+    ? `${cityName} — découvrez la ville`
+    : "Chefchaouen au coucher du soleil";
+
   return (
     <div>
       {/* Hero */}
       <section className="relative overflow-hidden">
         <div className="absolute inset-0">
           <img
-            src={heroImg}
-            alt="Chefchaouen au coucher du soleil"
+            src={heroSrc}
+            alt={heroAlt}
             width={1920}
             height={1080}
             className="h-full w-full object-cover"
@@ -42,14 +56,23 @@ function HomePage() {
         <div className="relative mx-auto max-w-7xl px-4 py-20 md:px-8 md:py-32">
           <div className="max-w-3xl text-primary-foreground animate-float-up">
             <span className="inline-flex items-center gap-2 rounded-full border border-white/30 bg-white/10 px-4 py-1.5 text-xs font-medium backdrop-blur">
-              <Sparkles className="h-3.5 w-3.5" /> Super-app marocaine des loisirs
+              {cityName ? (
+                <><MapPin className="h-3.5 w-3.5" /> Vous explorez {cityName}</>
+              ) : (
+                <><Sparkles className="h-3.5 w-3.5" /> Super-app marocaine des loisirs</>
+              )}
             </span>
             <h1 className="mt-6 font-display text-5xl font-bold leading-[1.05] tracking-tight md:text-7xl text-balance">
-              Le Maroc se vit.<br />
-              <span className="italic text-saffron">Réservez l'instant.</span>
+              {cityName ? (
+                <>{cityName} se vit.<br /><span className="italic text-saffron">Réservez l'instant.</span></>
+              ) : (
+                <>Le Maroc se vit.<br /><span className="italic text-saffron">Réservez l'instant.</span></>
+              )}
             </h1>
             <p className="mt-6 max-w-xl text-lg text-white/90 md:text-xl">
-              De Chefchaouen aux dunes de Merzouga : découvrez +50 expériences locales, recommandées en temps réel selon votre humeur, la météo et votre position.
+              {cityName
+                ? `Découvrez les expériences locales de ${cityName} — recommandées en temps réel selon votre humeur, la météo et votre position.`
+                : "De Chefchaouen aux dunes de Merzouga : découvrez +50 expériences locales, recommandées en temps réel selon votre humeur, la météo et votre position."}
             </p>
             <div className="mt-8 flex flex-wrap gap-3">
               <Link
