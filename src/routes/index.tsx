@@ -5,7 +5,10 @@ import { MoodPicker } from "@/components/MoodPicker";
 import { ActivitiesGrid } from "@/components/ActivitiesGrid";
 import { GoldenHourWidget } from "@/components/GoldenHourWidget";
 import { useAuth } from "@/contexts/AuthContext";
-import { ArrowRight, Sparkles, Zap, Users, Bot } from "lucide-react";
+import { useFilters } from "@/contexts/FiltersContext";
+import { useActivityImages } from "@/hooks/useActivityImages";
+import { ACTIVITIES } from "@/data/activities";
+import { ArrowRight, Sparkles, Zap, Users, Bot, MapPin } from "lucide-react";
 
 export const Route = createFileRoute("/")({
   head: () => ({
