@@ -231,6 +231,9 @@ export type Database = {
           partner_activity_id: string | null
           partner_business_name: string | null
           partner_description: string | null
+          partner_duration: string | null
+          partner_hero_url: string | null
+          partner_price_mad: number | null
           updated_at: string
           user_id: string
         }
@@ -243,6 +246,9 @@ export type Database = {
           partner_activity_id?: string | null
           partner_business_name?: string | null
           partner_description?: string | null
+          partner_duration?: string | null
+          partner_hero_url?: string | null
+          partner_price_mad?: number | null
           updated_at?: string
           user_id: string
         }
@@ -255,6 +261,9 @@ export type Database = {
           partner_activity_id?: string | null
           partner_business_name?: string | null
           partner_description?: string | null
+          partner_duration?: string | null
+          partner_hero_url?: string | null
+          partner_price_mad?: number | null
           updated_at?: string
           user_id?: string
         }
