@@ -143,9 +143,21 @@ function ActivityDetail() {
           <div className="rounded-3xl border border-border bg-card p-6 shadow-elegant">
             <div className="text-xs uppercase text-muted-foreground">à partir de</div>
             <div className="mt-1 flex items-baseline gap-2">
-              <span className="font-display text-4xl font-bold text-primary">{activity.price}</span>
+              {hasFlash ? (
+                <>
+                  <span className="font-display text-4xl font-bold text-destructive">{effectivePrice}</span>
+                  <span className="text-sm text-muted-foreground line-through">{activity.price} MAD</span>
+                </>
+              ) : (
+                <span className="font-display text-4xl font-bold text-primary">{activity.price}</span>
+              )}
               <span className="text-sm text-muted-foreground">MAD / pers.</span>
             </div>
+            {hasFlash && (
+              <div className="mt-2 inline-flex items-center gap-1 rounded-full bg-destructive/10 px-2.5 py-1 text-xs font-bold text-destructive">
+                <TrendingDown className="h-3 w-3" /> Réduction de −{activity.flashDeal!.discountPct}% appliquée
+              </div>
+            )}
             <div className="mt-4 space-y-3 text-sm">
               <div className="flex justify-between border-b border-border/60 pb-2">
                 <span className="text-muted-foreground">Prestataire</span>
@@ -164,13 +176,21 @@ function ActivityDetail() {
               onClick={() => setBookingOpen(true)}
               className="mt-6 w-full rounded-2xl bg-primary py-3.5 font-semibold text-primary-foreground shadow-soft transition hover:opacity-90"
             >
-              Réserver maintenant
+              Réserver maintenant · {effectivePrice} MAD
             </button>
+            {activity.lightning && (
+              <Link
+                to="/lightning"
+                className="mt-2 flex w-full items-center justify-center gap-1.5 rounded-2xl border border-accent/40 bg-accent/10 py-3 text-center text-sm font-semibold text-accent-foreground transition hover:bg-accent/20"
+              >
+                <Zap className="h-4 w-4" /> Lightning Match — rejoindre un groupe
+              </Link>
+            )}
             <Link
-              to="/lightning"
-              className="mt-2 block w-full rounded-2xl border border-border bg-background py-3 text-center text-sm font-medium transition hover:border-primary"
+              to="/support"
+              className="mt-2 flex w-full items-center justify-center gap-1.5 rounded-2xl border border-border bg-background py-3 text-center text-sm font-medium transition hover:border-primary"
             >
-              Lightning Match — rejoindre un groupe
+              <MessageCircle className="h-4 w-4" /> Message au prestataire
             </Link>
             <p className="mt-3 text-center text-xs text-muted-foreground">
               QR Code envoyé par SMS + email après paiement
