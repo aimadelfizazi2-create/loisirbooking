@@ -151,6 +151,17 @@ export function Header() {
         <div className="ml-auto flex items-center gap-2">
           <CityPicker />
 
+          {/* Yasmine CTA — open the assistant */}
+          <button
+            type="button"
+            onClick={() => window.dispatchEvent(new Event("yasmine:open"))}
+            aria-label="Ouvrir Yasmine, l'assistante IA"
+            className="hidden h-10 items-center gap-1.5 rounded-full bg-gradient-warm px-3 text-xs font-semibold text-primary-foreground shadow-soft transition hover:scale-105 md:inline-flex"
+          >
+            <Sparkles className="h-3.5 w-3.5" />
+            Yasmine
+          </button>
+
           {/* Partner CTA — desktop only, separate from nav */}
           <Link
             to="/partner"

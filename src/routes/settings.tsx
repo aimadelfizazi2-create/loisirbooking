@@ -2,15 +2,16 @@ import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
-import { ACTIVITIES } from "@/data/activities";
+import { useServerFn } from "@tanstack/react-start";
+import { searchPexels, type PexelsPhoto } from "@/lib/pexels-search.functions";
 import { CITIES } from "@/data/cities";
-import { User as UserIcon, Building2, MapPin, Save, Loader2, CheckCircle2, Briefcase } from "lucide-react";
+import { User as UserIcon, Building2, MapPin, Save, Loader2, CheckCircle2, Briefcase, Search, Image as ImageIcon } from "lucide-react";
 
 export const Route = createFileRoute("/settings")({
   head: () => ({
     meta: [
       { title: "Paramètres du compte — LoisirBooking" },
-      { name: "description", content: "Modifiez vos informations personnelles, votre ville préférée et — si vous êtes partenaire — votre fiche activité." },
+      { name: "description", content: "Modifiez vos informations personnelles, votre ville préférée et — si vous êtes partenaire — votre fiche activité libre." },
     ],
   }),
   component: SettingsPage,
@@ -19,23 +20,40 @@ export const Route = createFileRoute("/settings")({
 function SettingsPage() {
   const { user, profile, isPartner, loading } = useAuth();
   const navigate = useNavigate();
+  const pexels = useServerFn(searchPexels);
 
   const [fullName, setFullName] = useState("");
   const [city, setCity] = useState("");
   const [avatarUrl, setAvatarUrl] = useState("");
   const [businessName, setBusinessName] = useState("");
-  const [activityId, setActivityId] = useState("");
+  const [description, setDescription] = useState("");
+  const [priceMad, setPriceMad] = useState<string>("");
+  const [duration, setDuration] = useState("");
+  const [heroUrl, setHeroUrl] = useState("");
   const [saving, setSaving] = useState(false);
   const [saved, setSaved] = useState(false);
   const [error, setError] = useState<string | null>(null);
+
+  // Pexels search state
+  const [pexelsQuery, setPexelsQuery] = useState("");
+  const [pexelsLoading, setPexelsLoading] = useState(false);
+  const [pexelsPhotos, setPexelsPhotos] = useState<PexelsPhoto[]>([]);
+  const [pexelsError, setPexelsError] = useState<string | null>(null);
 
   useEffect(() => {
     if (profile) {
       setFullName(profile.full_name ?? "");
       setCity(profile.city ?? "tanger");
       setAvatarUrl(profile.avatar_url ?? "");
-      setBusinessName(profile.partner_business_name ?? "");
-      setActivityId(profile.partner_activity_id ?? "");
+      setBusinessName((profile as any).partner_business_name ?? "");
+      setDescription((profile as any).partner_description ?? "");
+      setPriceMad(
+        (profile as any).partner_price_mad != null
+          ? String((profile as any).partner_price_mad)
+          : ""
+      );
+      setDuration((profile as any).partner_duration ?? "");
+      setHeroUrl((profile as any).partner_hero_url ?? "");
     }
   }, [profile]);
 
@@ -43,7 +61,15 @@ function SettingsPage() {
     if (!loading && !user) navigate({ to: "/auth" });
   }, [loading, user, navigate]);
 
-  const partnerActivity = ACTIVITIES.find((a) => a.id === activityId);
+  const runPexels = async () => {
+    if (!pexelsQuery.trim()) return;
+    setPexelsLoading(true);
+    setPexelsError(null);
+    const res = await pexels({ data: { query: pexelsQuery.trim(), perPage: 12 } });
+    setPexelsPhotos(res.photos);
+    if (res.error) setPexelsError(res.error);
+    setPexelsLoading(false);
+  };
 
   const handleSave = async () => {
     if (!user) return;
@@ -51,25 +77,22 @@ function SettingsPage() {
     setSaved(false);
     setError(null);
 
-    const updates: {
-      full_name: string | null;
-      city: string | null;
-      avatar_url: string | null;
-      partner_business_name?: string | null;
-      partner_activity_id?: string | null;
-    } = {
+    const updates: Record<string, unknown> = {
       full_name: fullName.trim() || null,
       city: city || null,
       avatar_url: avatarUrl.trim() || null,
     };
     if (isPartner) {
       updates.partner_business_name = businessName.trim() || null;
-      updates.partner_activity_id = activityId || null;
+      updates.partner_description = description.trim() || null;
+      updates.partner_price_mad = priceMad ? parseInt(priceMad, 10) : null;
+      updates.partner_duration = duration.trim() || null;
+      updates.partner_hero_url = heroUrl.trim() || null;
     }
 
     const { error: err } = await supabase
       .from("profiles")
-      .update(updates)
+      .update(updates as any)
       .eq("user_id", user.id);
 
     setSaving(false);
@@ -95,7 +118,7 @@ function SettingsPage() {
         <div className="text-xs font-bold uppercase tracking-widest text-muted-foreground">Compte</div>
         <h1 className="mt-1 font-display text-3xl font-bold md:text-4xl">Paramètres</h1>
         <p className="mt-2 text-sm text-muted-foreground">
-          Vos informations personnelles{isPartner ? " et votre fiche partenaire" : ""}.
+          Vos informations personnelles{isPartner ? " et votre fiche partenaire libre" : ""}.
         </p>
       </div>
 
@@ -150,55 +173,148 @@ function SettingsPage() {
         </div>
       </section>
 
-      {/* Partner section */}
+      {/* Partner section — free-form */}
       {isPartner && (
         <section className="mt-6 rounded-3xl border border-saffron/30 bg-saffron/5 p-6 shadow-soft md:p-8">
           <div className="mb-6 flex items-center gap-2">
             <Briefcase className="h-5 w-5 text-saffron-foreground" />
-            <h2 className="font-display text-xl font-bold">Fiche partenaire</h2>
+            <h2 className="font-display text-xl font-bold">Fiche partenaire libre</h2>
           </div>
 
           <div className="grid gap-4">
-            <Field label="Nom de l'activité / structure" icon={<Building2 className="h-4 w-4" />}>
+            <Field label="Nom de votre activité" icon={<Building2 className="h-4 w-4" />}>
               <input
                 type="text"
                 value={businessName}
                 onChange={(e) => setBusinessName(e.target.value)}
-                placeholder="Tanger Discovery"
+                placeholder="Ex. Atelier de zellige à Fès"
                 className="w-full rounded-xl border border-border bg-background px-3 py-2.5 text-sm outline-none focus:border-primary"
               />
             </Field>
 
-            <Field label="Activité gérée">
-              <select
-                value={activityId}
-                onChange={(e) => setActivityId(e.target.value)}
+            <Field label="Description" hint="Décrivez votre expérience en quelques phrases">
+              <textarea
+                value={description}
+                onChange={(e) => setDescription(e.target.value)}
+                rows={4}
+                placeholder="Initiez-vous à l'art ancestral du zellige dans notre atelier familial..."
                 className="w-full rounded-xl border border-border bg-background px-3 py-2.5 text-sm outline-none focus:border-primary"
-              >
-                <option value="">— Aucune —</option>
-                {ACTIVITIES.map((a) => (
-                  <option key={a.id} value={a.id}>{a.title} · {a.city}</option>
-                ))}
-              </select>
+              />
             </Field>
 
-            {partnerActivity && (
+            <div className="grid gap-4 sm:grid-cols-2">
+              <Field label="Prix (MAD / personne)">
+                <input
+                  type="number"
+                  min={0}
+                  value={priceMad}
+                  onChange={(e) => setPriceMad(e.target.value)}
+                  placeholder="350"
+                  className="w-full rounded-xl border border-border bg-background px-3 py-2.5 text-sm outline-none focus:border-primary"
+                />
+              </Field>
+              <Field label="Durée">
+                <input
+                  type="text"
+                  value={duration}
+                  onChange={(e) => setDuration(e.target.value)}
+                  placeholder="3h"
+                  className="w-full rounded-xl border border-border bg-background px-3 py-2.5 text-sm outline-none focus:border-primary"
+                />
+              </Field>
+            </div>
+
+            {/* Pexels image picker */}
+            <div className="rounded-2xl border border-border bg-card p-4">
+              <div className="flex items-center gap-2">
+                <ImageIcon className="h-4 w-4 text-primary" />
+                <span className="text-sm font-semibold">Image de couverture</span>
+              </div>
+              <div className="mt-3 flex gap-2">
+                <input
+                  type="text"
+                  value={pexelsQuery}
+                  onChange={(e) => setPexelsQuery(e.target.value)}
+                  onKeyDown={(e) => e.key === "Enter" && (e.preventDefault(), runPexels())}
+                  placeholder="ex. zellige fès atelier"
+                  className="flex-1 rounded-xl border border-border bg-background px-3 py-2 text-sm outline-none focus:border-primary"
+                />
+                <button
+                  type="button"
+                  onClick={runPexels}
+                  disabled={pexelsLoading}
+                  className="inline-flex items-center gap-1.5 rounded-xl bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground transition hover:opacity-90 disabled:opacity-60"
+                >
+                  {pexelsLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Search className="h-4 w-4" />}
+                  Rechercher
+                </button>
+              </div>
+              {pexelsError && (
+                <div className="mt-2 text-xs text-destructive">{pexelsError}</div>
+              )}
+              {pexelsPhotos.length > 0 && (
+                <div className="mt-3 grid grid-cols-3 gap-2 sm:grid-cols-4">
+                  {pexelsPhotos.map((p) => (
+                    <button
+                      key={p.id}
+                      type="button"
+                      onClick={() => setHeroUrl(p.large)}
+                      className={`group relative aspect-[4/3] overflow-hidden rounded-lg border-2 transition ${
+                        heroUrl === p.large ? "border-primary" : "border-transparent hover:border-primary/40"
+                      }`}
+                      title={p.photographer}
+                    >
+                      <img src={p.thumb} alt={p.photographer} className="h-full w-full object-cover" loading="lazy" />
+                      {heroUrl === p.large && (
+                        <span className="absolute inset-0 flex items-center justify-center bg-primary/30">
+                          <CheckCircle2 className="h-5 w-5 text-primary-foreground" />
+                        </span>
+                      )}
+                    </button>
+                  ))}
+                </div>
+              )}
+              <Field label="URL de l'image (modifiable)" hint="Ou collez un lien direct">
+                <input
+                  type="url"
+                  value={heroUrl}
+                  onChange={(e) => setHeroUrl(e.target.value)}
+                  placeholder="https://..."
+                  className="mt-2 w-full rounded-xl border border-border bg-background px-3 py-2.5 text-sm outline-none focus:border-primary"
+                />
+              </Field>
+            </div>
+
+            {/* Preview */}
+            {(businessName || description || heroUrl) && (
               <div className="rounded-2xl border border-border bg-card p-4">
                 <div className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">Aperçu de votre fiche</div>
                 <div className="mt-3 flex gap-4">
-                  <img src={partnerActivity.image} alt={partnerActivity.title} className="h-20 w-20 flex-shrink-0 rounded-xl object-cover" loading="lazy" />
+                  {heroUrl ? (
+                    <img src={heroUrl} alt={businessName} className="h-24 w-24 flex-shrink-0 rounded-xl object-cover" loading="lazy" />
+                  ) : (
+                    <div className="flex h-24 w-24 flex-shrink-0 items-center justify-center rounded-xl bg-secondary text-muted-foreground">
+                      <ImageIcon className="h-6 w-6" />
+                    </div>
+                  )}
                   <div className="min-w-0 flex-1">
-                    <div className="font-display font-bold">{partnerActivity.title}</div>
+                    <div className="font-display font-bold">{businessName || "Sans nom"}</div>
                     <div className="mt-0.5 flex items-center gap-1 text-xs text-muted-foreground">
-                      <MapPin className="h-3 w-3" /> {CITIES.find((c) => c.id === partnerActivity.city)?.name} · {partnerActivity.duration}
+                      <MapPin className="h-3 w-3" /> {CITIES.find((c) => c.id === city)?.name}
+                      {duration && <> · {duration}</>}
                     </div>
-                    <div className="mt-1.5 text-sm font-semibold text-primary">
-                      {partnerActivity.price} MAD <span className="text-xs font-normal text-muted-foreground">/ pers.</span>
-                    </div>
+                    {description && (
+                      <p className="mt-1.5 line-clamp-2 text-xs text-muted-foreground">{description}</p>
+                    )}
+                    {priceMad && (
+                      <div className="mt-1.5 text-sm font-semibold text-primary">
+                        {priceMad} MAD <span className="text-xs font-normal text-muted-foreground">/ pers.</span>
+                      </div>
+                    )}
                   </div>
                 </div>
                 <p className="mt-3 text-xs text-muted-foreground">
-                  Le détail des créneaux et tarifs se modifie depuis le{" "}
+                  Gérez vos créneaux depuis le{" "}
                   <Link to="/partner" className="text-primary hover:underline">Dashboard Partenaire</Link>.
                 </p>
               </div>

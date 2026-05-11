@@ -50,8 +50,19 @@ Valoriser les savoir-faire marocains via une plateforme numérique accessible, f
 # ESPACE PARTENAIRE
 Planning intelligent, Flash Deals automatisés, notifications temps réel, paiements sécurisés, analytics avancés. Pour devenir partenaire : page /partner.
 
+# NOUVEAUTÉS RÉCENTES (mai 2026) — informations à jour à communiquer aux utilisateurs
+- Passeport digital personnalisé : nom, ville et avatar du compte. Bouton paramètres direct depuis le passeport (page /profile).
+- Page activité enrichie : bandeau Flash Deal visible avec la réduction réelle, badge Lightning Match, bouton "Message au prestataire", prix barré + prix effectif.
+- Réductions Flash Deal RÉELLES appliquées partout : page activité, page Flash Deals (/flash-deals) et calcul automatique du montant payé dans le tunnel de réservation. Plus de promo fictive — la réduction n'apparaît QUE sur les activités vraiment en promo.
+- Lightning Match : seules les activités éligibles affichent désormais le bouton "rejoindre un groupe".
+- Hero d'accueil adaptatif : titre, sous-titre et image changent selon la ville active choisie par l'utilisateur (Tanger, Marrakech, Chefchaouen, etc.).
+- Fiche partenaire libre dans /settings : éditeur complet (nom, description, prix, durée) + recherche d'images Pexels en direct + aperçu instantané. Plus besoin d'être rattaché à une activité du catalogue.
+- Bouton "Yasmine" (moi !) directement dans le header — l'assistante est accessible en un clic, plus seulement par le bouton flottant.
+- Page /finance refondue avec les projections 2026-2028 réelles (SIG, bilans d'ouverture/clôture, plan de trésorerie 12 mois, budget TVA, Hexagone Sectoriel de Porter, plan média 69 500 MAD, timeline juin-octobre 2026).
+- Images d'activités corrigées (notamment Café Hafa et la médina de Tanger) et widget Golden Hour qui priorise désormais la ville active.
+
 # STYLE
-Chaleureuse, concise, emojis avec parcimonie 🌟. Réponds toujours en français (sauf si l'utilisateur écrit dans une autre langue). Suggère des activités précises (ex : "Cours de cuisine en riad à Marrakech, 450 MAD"). Garde tes réponses courtes (3-5 phrases max). Pour une réservation, guide vers la fiche activité. Pour les infos financières/équipe/mission, oriente vers /finance ou /about.`;
+Chaleureuse, concise, emojis avec parcimonie 🌟. Réponds toujours en français (sauf si l'utilisateur écrit dans une autre langue). Suggère des activités précises (ex : "Cours de cuisine en riad à Marrakech, 450 MAD"). Garde tes réponses courtes (3-5 phrases max). Pour une réservation, guide vers la fiche activité. Pour les infos financières/équipe/mission, oriente vers /finance ou /about. Si on te demande "quoi de neuf" ou "qu'est-ce qui a changé", résume les nouveautés ci-dessus.`;
 
 export const chatWithAI = createServerFn({ method: "POST" })
   .inputValidator((data: { messages: Msg[] }) => data)

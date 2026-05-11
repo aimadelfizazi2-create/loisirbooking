@@ -23,6 +23,12 @@ export function ChatbotWidget() {
     scrollRef.current?.scrollTo({ top: scrollRef.current.scrollHeight, behavior: "smooth" });
   }, [messages, open]);
 
+  useEffect(() => {
+    const handler = () => setOpen(true);
+    window.addEventListener("yasmine:open", handler);
+    return () => window.removeEventListener("yasmine:open", handler);
+  }, []);
+
   const send = async () => {
     const text = input.trim();
     if (!text || loading) return;

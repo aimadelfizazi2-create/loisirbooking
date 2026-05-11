@@ -1,6 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { ACTIVITIES } from "@/data/activities";
 import { CITIES } from "@/data/cities";
+import { useAuth } from "@/contexts/AuthContext";
 import { Award, MapPin, Calendar, Star, Trophy, Sparkles, Heart, Settings, Share2 } from "lucide-react";
 
 export const Route = createFileRoute("/profile")({
@@ -42,9 +43,14 @@ const UPCOMING = [
 ];
 
 function ProfilePage() {
+  const { user, profile } = useAuth();
   const earnedBadges = BADGES.filter((b) => b.earned);
   const stamps = HISTORY.length;
   const cities = new Set(HISTORY.map((h) => ACTIVITIES.find((a) => a.id === h.activityId)?.city)).size;
+
+  const displayName = profile?.full_name?.trim() || user?.email?.split("@")[0] || "Voyageur";
+  const cityName = CITIES.find((c) => c.id === profile?.city)?.name ?? "Maroc";
+  const initial = displayName.charAt(0).toUpperCase();
 
   return (
     <div className="mx-auto max-w-7xl px-4 py-10 md:px-8 md:py-14">
@@ -52,14 +58,22 @@ function ProfilePage() {
       <div className="overflow-hidden rounded-3xl bg-gradient-warm p-8 text-primary-foreground shadow-elegant md:p-10">
         <div className="flex flex-col gap-6 md:flex-row md:items-center md:justify-between">
           <div className="flex items-center gap-5">
-            <div className="flex h-20 w-20 items-center justify-center rounded-3xl bg-white/20 text-4xl backdrop-blur md:h-24 md:w-24">
-              🌟
-            </div>
+            {profile?.avatar_url ? (
+              <img
+                src={profile.avatar_url}
+                alt={displayName}
+                className="h-20 w-20 rounded-3xl object-cover ring-2 ring-white/30 md:h-24 md:w-24"
+              />
+            ) : (
+              <div className="flex h-20 w-20 items-center justify-center rounded-3xl bg-white/20 font-display text-4xl font-bold backdrop-blur md:h-24 md:w-24">
+                {initial}
+              </div>
+            )}
             <div>
               <div className="text-xs uppercase tracking-wider opacity-80">Passeport Digital</div>
-              <h1 className="mt-1 font-display text-3xl font-bold md:text-4xl">Yasmine Bennani</h1>
+              <h1 className="mt-1 font-display text-3xl font-bold md:text-4xl">{displayName}</h1>
               <div className="mt-1 flex items-center gap-1.5 text-sm opacity-90">
-                <MapPin className="h-3.5 w-3.5" /> Casablanca, Maroc · Membre depuis 2024
+                <MapPin className="h-3.5 w-3.5" /> {cityName}, Maroc · {user?.email}
               </div>
             </div>
           </div>
@@ -67,9 +81,13 @@ function ProfilePage() {
             <button className="flex items-center gap-2 rounded-full bg-white/20 px-4 py-2 text-sm font-semibold backdrop-blur transition hover:bg-white/30">
               <Share2 className="h-4 w-4" /> Partager
             </button>
-            <button className="flex h-10 w-10 items-center justify-center rounded-full bg-white/20 backdrop-blur transition hover:bg-white/30">
+            <Link
+              to="/settings"
+              aria-label="Paramètres"
+              className="flex h-10 w-10 items-center justify-center rounded-full bg-white/20 backdrop-blur transition hover:bg-white/30"
+            >
               <Settings className="h-4 w-4" />
-            </button>
+            </Link>
           </div>
         </div>
 
