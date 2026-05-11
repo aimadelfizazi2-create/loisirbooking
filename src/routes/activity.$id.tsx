@@ -41,12 +41,32 @@ function ActivityDetail() {
   const { data: images } = useActivityImages(activity);
   const heroSrc = images?.hero_url ?? activity.image;
   const gallery = images?.gallery_urls ?? [];
+  const effectivePrice = getEffectivePrice(activity);
+  const hasFlash = !!activity.flashDeal;
 
   return (
     <div className="mx-auto max-w-6xl px-4 py-8 md:px-8 md:py-12">
       <Link to="/activities" className="mb-6 inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-primary">
         <ArrowLeft className="h-4 w-4" /> Retour
       </Link>
+
+      {hasFlash && (
+        <div className="mb-6 flex flex-wrap items-center gap-3 rounded-2xl border border-destructive/30 bg-gradient-to-r from-destructive/15 via-destructive/5 to-transparent p-4 shadow-soft">
+          <span className="flex h-9 w-9 items-center justify-center rounded-full bg-destructive text-destructive-foreground">
+            <Flame className="h-4 w-4" />
+          </span>
+          <div className="flex-1 min-w-[200px]">
+            <div className="flex items-center gap-2 text-sm font-bold text-destructive">
+              <TrendingDown className="h-4 w-4" /> Flash Deal — −{activity.flashDeal!.discountPct}%
+            </div>
+            <div className="text-xs text-muted-foreground">{activity.flashDeal!.reason}</div>
+          </div>
+          <div className="text-right">
+            <div className="text-xs text-muted-foreground line-through">{activity.price} MAD</div>
+            <div className="font-display text-xl font-bold text-destructive">{effectivePrice} MAD</div>
+          </div>
+        </div>
+      )}
 
       <div className="grid gap-10 lg:grid-cols-3">
         <div className="lg:col-span-2">
