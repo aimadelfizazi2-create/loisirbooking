@@ -1,6 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { ACTIVITIES } from "@/data/activities";
 import { CITIES } from "@/data/cities";
+import { useAuth } from "@/contexts/AuthContext";
 import { Award, MapPin, Calendar, Star, Trophy, Sparkles, Heart, Settings, Share2 } from "lucide-react";
 
 export const Route = createFileRoute("/profile")({
