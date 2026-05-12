@@ -81,7 +81,11 @@ export function FiltersProvider({ children }: { children: ReactNode }) {
     );
   }, []);
 
-  const activeCity = manualCity ?? detectedCity;
+  // activeCity reflects the search filter: exactly 1 city → that city, otherwise null
+  // (0 = toutes les villes, 2+ = comparaison Maroc entier).
+  const activeCity = selectedCities.length === 1
+    ? (CITIES.find((c) => c.id === selectedCities[0]) ?? null)
+    : null;
 
   const value = useMemo<FiltersState>(
     () => ({
