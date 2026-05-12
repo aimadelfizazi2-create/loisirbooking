@@ -47,6 +47,44 @@ Valoriser les savoir-faire marocains via une plateforme numérique accessible, f
 - Budget marketing annuel : 168 000 MAD
 - Conformité : normes CGNC marocaines, audité par Cabinet Bennani & Associés
 
+# COMMUNICATION FINANCIÈRE PRÉVISIONNELLE 2026-2028 (page /finance)
+Exercice de constitution : 1er juin → 31 décembre 2026 (Go-Live 1er septembre 2026). Capital social 550 000 MAD libéré.
+
+## SIG — Soldes Intermédiaires de Gestion
+| Indicateur          | N (2026)     | N+1 (2027)   | N+2 (2028)    |
+|---------------------|--------------|--------------|---------------|
+| CA / Production     | 641 550 MAD  | 1 603 875 MAD| 2 245 425 MAD |
+| Valeur ajoutée      | 353 150 MAD  | 1 228 955 MAD| 1 668 625 MAD |
+| EBE                 | -540 154 MAD | 162 590 MAD  | 169 608 MAD   |
+| Résultat exploitation| -558 820 MAD| 143 924 MAD  | 150 942 MAD   |
+| Résultat net        | -570 183 MAD | 132 561 MAD  | 139 579 MAD   |
+| CAF                 | -551 517 MAD | 151 227 MAD  | 158 245 MAD   |
+La perte 2026 est normale (année de constitution + 5 mois pré-lancement). Retour à profitabilité dès 2027.
+
+## Chiffre d'affaires mensuel 2026 (9 370 réservations · 641 550 MAD)
+Juin 50 000 · Juillet 123 400 · Août 205 250 (pic estival) · Sept 83 000 · Oct 56 625 · Nov 45 250 · Déc 78 025 MAD. Structure : commissions partenaires (45%), frais de service clients (29%), abonnements pros (5%).
+
+## Bilans
+- Ouverture (juin 2026) : Total bilan ~570 000 MAD · capitaux propres 550 000 MAD.
+- Clôture (31 déc 2026) : capitaux propres -20 183 MAD (après perte), TVA à payer 8 685 MAD, crédit TVA reportable sur investissements.
+
+## Plan de trésorerie 12 mois 2026 & Budget TVA
+Encaissements concentrés sur juin-décembre. TVA 20% : crédit de TVA constitué en pré-lancement (achats + investissements), absorbé progressivement, premier paiement TVA en décembre.
+
+## Plan média 2026 — Budget total 69 500 MAD (juin → octobre)
+Réparti sur 5 catégories : Influence (28 500 MAD), Search & Display (18 000 MAD), Réseaux sociaux (12 000 MAD), Hors média web (7 000 MAD), Relations presse (4 000 MAD).
+
+## Hexagone Sectoriel de Porter — Score 17/30
+- Concurrents directs : 3/5 (Airbnb Experiences, GetYourGuide locaux)
+- Nouveaux entrants : 4/5 (barrières faibles, ~550k MAD pour démarrer)
+- Produits de substitution : 2/5 (faible, ancrage local fort)
+- Pouvoir clients : 3/5
+- Pouvoir fournisseurs (prestataires) : 3/5
+- Pouvoirs publics : 2/5 (cadre TVA 20% favorable, exonération taxe pro 5 ans, IS avantageux)
+
+## Jalons projet (juin → octobre 2026)
+1er juin : constitution SARL · juin-juillet : recrutement & dev · août : onboarding 50 partenaires Tanger/Chefchaouen · 1er septembre : Go-Live public · sept-oct : campagne média & expansion Marrakech/Merzouga.
+
 # ESPACE PARTENAIRE
 Planning intelligent, Flash Deals automatisés, notifications temps réel, paiements sécurisés, analytics avancés. Pour devenir partenaire : page /partner.
 

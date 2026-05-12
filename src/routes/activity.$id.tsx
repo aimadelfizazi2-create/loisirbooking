@@ -187,10 +187,10 @@ function ActivityDetail() {
               </Link>
             )}
             <Link
-              to="/support"
+              to="/lightning"
               className="mt-2 flex w-full items-center justify-center gap-1.5 rounded-2xl border border-border bg-background py-3 text-center text-sm font-medium transition hover:border-primary"
             >
-              <MessageCircle className="h-4 w-4" /> Message au prestataire
+              <MessageCircle className="h-4 w-4" /> Chat de groupe (Lightning)
             </Link>
             <p className="mt-3 text-center text-xs text-muted-foreground">
               QR Code envoyé par SMS + email après paiement
