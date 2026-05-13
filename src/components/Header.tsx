@@ -1,6 +1,7 @@
 import { Link, useNavigate, useLocation } from "@tanstack/react-router";
 import { Menu, X, LogOut, LayoutDashboard, User as UserIcon, ChevronDown, Compass, Zap, MapPin, Route as RouteIcon, CloudSun, Sparkles, Briefcase, Settings, Headphones, FileText } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
+import { AnimatePresence, motion } from "framer-motion";
 import { CityPicker } from "./CityPicker";
 import { useAuth } from "@/contexts/AuthContext";
 import logo from "@/assets/logo-loisirbooking.png";
@@ -38,11 +39,19 @@ export function Header() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [userMenu, setUserMenu] = useState(false);
   const [openGroup, setOpenGroup] = useState<string | null>(null);
+  const [scrolled, setScrolled] = useState(false);
   const groupRef = useRef<HTMLDivElement>(null);
   const userRef = useRef<HTMLDivElement>(null);
   const { user, profile, isPartner, signOut } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
+
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 8);
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
 
   // Close menus on route change
   useEffect(() => {
@@ -73,7 +82,13 @@ export function Header() {
     group.items.some((it) => location.pathname === it.to || location.pathname.startsWith(it.to + "/"));
 
   return (
-    <header className="sticky top-0 z-40 border-b border-border/40 bg-background/85 backdrop-blur-xl">
+    <header
+      className={`sticky top-0 z-40 border-b backdrop-blur-xl transition-all duration-300 ${
+        scrolled
+          ? "border-border/60 bg-background/95 shadow-soft"
+          : "border-transparent bg-background/70"
+      }`}
+    >
       <div className="mx-auto flex h-16 max-w-7xl items-center gap-3 px-4 md:px-6">
         {/* Logo */}
         <Link to="/" className="flex shrink-0 items-center gap-2.5">
