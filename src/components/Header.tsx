@@ -131,8 +131,15 @@ export function Header() {
                   {entry.label}
                   <ChevronDown className={`h-3.5 w-3.5 transition ${isOpen ? "rotate-180" : ""}`} />
                 </button>
+                <AnimatePresence>
                 {isOpen && (
-                  <div className="absolute left-0 top-full z-50 mt-2 w-72 overflow-hidden rounded-2xl border border-border bg-popover p-1.5 shadow-elegant">
+                  <motion.div
+                    initial={{ opacity: 0, y: -8, scale: 0.98 }}
+                    animate={{ opacity: 1, y: 0, scale: 1 }}
+                    exit={{ opacity: 0, y: -8, scale: 0.98 }}
+                    transition={{ duration: 0.18, ease: [0.22, 1, 0.36, 1] }}
+                    className="absolute left-0 top-full z-50 mt-2 w-72 overflow-hidden rounded-2xl border border-border bg-popover p-1.5 shadow-elegant"
+                  >
                     {entry.items.map((item) => {
                       const ItemIcon = item.icon;
                       return (
@@ -140,7 +147,7 @@ export function Header() {
                           key={item.to}
                           to={item.to}
                           onClick={() => setOpenGroup(null)}
-                          className="flex items-start gap-3 rounded-xl px-3 py-2.5 transition hover:bg-secondary"
+                          className="flex items-start gap-3 rounded-xl px-3 py-2.5 transition hover:bg-secondary hover:translate-x-0.5"
                         >
                           {ItemIcon && (
                             <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-primary/10 text-primary">
@@ -156,8 +163,9 @@ export function Header() {
                         </Link>
                       );
                     })}
-                  </div>
+                  </motion.div>
                 )}
+                </AnimatePresence>
               </div>
             );
           })}
