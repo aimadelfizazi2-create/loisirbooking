@@ -1,6 +1,7 @@
 import { Link, useNavigate, useLocation } from "@tanstack/react-router";
 import { Menu, X, LogOut, LayoutDashboard, User as UserIcon, ChevronDown, Compass, Zap, MapPin, Route as RouteIcon, CloudSun, Sparkles, Briefcase, Settings, Headphones, FileText } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
+import { AnimatePresence, motion } from "framer-motion";
 import { CityPicker } from "./CityPicker";
 import { useAuth } from "@/contexts/AuthContext";
 import logo from "@/assets/logo-loisirbooking.png";
@@ -38,11 +39,19 @@ export function Header() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [userMenu, setUserMenu] = useState(false);
   const [openGroup, setOpenGroup] = useState<string | null>(null);
+  const [scrolled, setScrolled] = useState(false);
   const groupRef = useRef<HTMLDivElement>(null);
   const userRef = useRef<HTMLDivElement>(null);
   const { user, profile, isPartner, signOut } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
+
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 8);
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
 
   // Close menus on route change
   useEffect(() => {
@@ -73,7 +82,13 @@ export function Header() {
     group.items.some((it) => location.pathname === it.to || location.pathname.startsWith(it.to + "/"));
 
   return (
-    <header className="sticky top-0 z-40 border-b border-border/40 bg-background/85 backdrop-blur-xl">
+    <header
+      className={`sticky top-0 z-40 border-b backdrop-blur-xl transition-all duration-300 ${
+        scrolled
+          ? "border-border/60 bg-background/95 shadow-soft"
+          : "border-transparent bg-background/70"
+      }`}
+    >
       <div className="mx-auto flex h-16 max-w-7xl items-center gap-3 px-4 md:px-6">
         {/* Logo */}
         <Link to="/" className="flex shrink-0 items-center gap-2.5">
@@ -116,8 +131,15 @@ export function Header() {
                   {entry.label}
                   <ChevronDown className={`h-3.5 w-3.5 transition ${isOpen ? "rotate-180" : ""}`} />
                 </button>
+                <AnimatePresence>
                 {isOpen && (
-                  <div className="absolute left-0 top-full z-50 mt-2 w-72 overflow-hidden rounded-2xl border border-border bg-popover p-1.5 shadow-elegant">
+                  <motion.div
+                    initial={{ opacity: 0, y: -8, scale: 0.98 }}
+                    animate={{ opacity: 1, y: 0, scale: 1 }}
+                    exit={{ opacity: 0, y: -8, scale: 0.98 }}
+                    transition={{ duration: 0.18, ease: [0.22, 1, 0.36, 1] }}
+                    className="absolute left-0 top-full z-50 mt-2 w-72 overflow-hidden rounded-2xl border border-border bg-popover p-1.5 shadow-elegant"
+                  >
                     {entry.items.map((item) => {
                       const ItemIcon = item.icon;
                       return (
@@ -125,7 +147,7 @@ export function Header() {
                           key={item.to}
                           to={item.to}
                           onClick={() => setOpenGroup(null)}
-                          className="flex items-start gap-3 rounded-xl px-3 py-2.5 transition hover:bg-secondary"
+                          className="flex items-start gap-3 rounded-xl px-3 py-2.5 transition hover:bg-secondary hover:translate-x-0.5"
                         >
                           {ItemIcon && (
                             <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-primary/10 text-primary">
@@ -141,8 +163,9 @@ export function Header() {
                         </Link>
                       );
                     })}
-                  </div>
+                  </motion.div>
                 )}
+                </AnimatePresence>
               </div>
             );
           })}
@@ -186,8 +209,15 @@ export function Header() {
                 </span>
                 <ChevronDown className="hidden h-3.5 w-3.5 md:inline" />
               </button>
+              <AnimatePresence>
               {userMenu && (
-                <div className="absolute right-0 top-full z-50 mt-2 w-64 overflow-hidden rounded-2xl border border-border bg-popover shadow-elegant">
+                <motion.div
+                  initial={{ opacity: 0, y: -8, scale: 0.98 }}
+                  animate={{ opacity: 1, y: 0, scale: 1 }}
+                  exit={{ opacity: 0, y: -8, scale: 0.98 }}
+                  transition={{ duration: 0.18, ease: [0.22, 1, 0.36, 1] }}
+                  className="absolute right-0 top-full z-50 mt-2 w-64 overflow-hidden rounded-2xl border border-border bg-popover shadow-elegant"
+                >
                   <div className="border-b border-border bg-secondary/40 px-4 py-3">
                     <div className="text-xs text-muted-foreground">Connecté en tant que</div>
                     <div className="truncate text-sm font-semibold">{user.email}</div>
@@ -235,8 +265,9 @@ export function Header() {
                       <LogOut className="h-4 w-4" /> Se déconnecter
                     </button>
                   </div>
-                </div>
+                </motion.div>
               )}
+              </AnimatePresence>
             </div>
           ) : (
             <Link
@@ -259,8 +290,15 @@ export function Header() {
       </div>
 
       {/* Mobile menu */}
+      <AnimatePresence>
       {mobileOpen && (
-        <div className="border-t border-border/50 bg-background lg:hidden">
+        <motion.div
+          initial={{ opacity: 0, height: 0 }}
+          animate={{ opacity: 1, height: "auto" }}
+          exit={{ opacity: 0, height: 0 }}
+          transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
+          className="overflow-hidden border-t border-border/50 bg-background lg:hidden"
+        >
           <nav className="mx-auto flex max-w-7xl flex-col gap-1 px-4 py-3">
             {NAV.map((entry) => {
               if (!isGroup(entry)) {
@@ -323,8 +361,9 @@ export function Header() {
               </Link>
             </div>
           </nav>
-        </div>
+        </motion.div>
       )}
+      </AnimatePresence>
     </header>
   );
 }

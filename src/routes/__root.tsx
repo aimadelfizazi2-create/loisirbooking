@@ -10,6 +10,7 @@ import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { ChatbotWidget } from "@/components/ChatbotWidget";
 import { CityConfirmBanner } from "@/components/CityConfirmBanner";
+import { PageTransition } from "@/components/motion/PageTransition";
 
 function NotFoundComponent() {
   return (
@@ -80,7 +81,9 @@ function RootComponent() {
               {!isAuthRoute && <Header />}
               {!isAuthRoute && <CityConfirmBanner />}
               <main className="flex-1">
-                <Outlet />
+                <PageTransition>
+                  <Outlet />
+                </PageTransition>
               </main>
               {!isAuthRoute && <Footer />}
               {!isAuthRoute && <ChatbotWidget />}
