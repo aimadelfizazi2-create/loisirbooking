@@ -1,4 +1,5 @@
 import { Link } from "@tanstack/react-router";
+import { motion } from "framer-motion";
 import { Star, Users, Clock, MapPin, Zap, TrendingDown } from "lucide-react";
 import { type Activity, PRICE_TIERS, getEffectivePrice } from "@/data/activities";
 import { CITIES } from "@/data/cities";
@@ -18,10 +19,16 @@ export function ActivityCard({ activity }: { activity: Activity }) {
   const heroSrc = images?.hero_url ?? activity.image;
 
   return (
+    <motion.div
+      variants={{ hidden: { opacity: 0, y: 24 }, show: { opacity: 1, y: 0 } }}
+      whileHover={{ y: -6 }}
+      transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
+      className="h-full"
+    >
     <Link
       to="/activity/$id"
       params={{ id: activity.id }}
-      className="group flex flex-col overflow-hidden rounded-3xl border border-border bg-card shadow-soft transition hover:-translate-y-1 hover:shadow-elegant"
+      className="group flex h-full flex-col overflow-hidden rounded-3xl border border-border bg-card shadow-soft transition duration-500 hover:shadow-elegant"
     >
       <div className="relative aspect-[4/3] overflow-hidden">
         <img
@@ -30,7 +37,7 @@ export function ActivityCard({ activity }: { activity: Activity }) {
           loading="lazy"
           width={1024}
           height={768}
-          className="h-full w-full object-cover transition duration-500 group-hover:scale-105"
+          className="h-full w-full object-cover transition duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-110"
         />
         <div className="absolute left-3 top-3 flex flex-wrap gap-1.5">
           {activity.flashDeal && (
