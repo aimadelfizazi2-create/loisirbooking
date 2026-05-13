@@ -265,8 +265,9 @@ export function Header() {
                       <LogOut className="h-4 w-4" /> Se déconnecter
                     </button>
                   </div>
-                </div>
+                </motion.div>
               )}
+              </AnimatePresence>
             </div>
           ) : (
             <Link
