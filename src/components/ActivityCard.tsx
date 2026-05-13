@@ -103,5 +103,6 @@ export function ActivityCard({ activity }: { activity: Activity }) {
         </div>
       </div>
     </Link>
+    </motion.div>
   );
 }

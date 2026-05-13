@@ -4,6 +4,7 @@ import { useFilters } from "@/contexts/FiltersContext";
 import { useWeather } from "@/hooks/useWeather";
 import { ActivityCard } from "./ActivityCard";
 import { CITIES } from "@/data/cities";
+import { StaggerGrid } from "./motion/Motion";
 
 const tierMaxPrice = { budget: 200, standard: 600, premium: 1500, luxe: Infinity } as const;
 const tierMinPrice = { budget: 0, standard: 200, premium: 600, luxe: 1500 } as const;
@@ -56,10 +57,10 @@ export function ActivitiesGrid({ limit }: { limit?: number }) {
   }
 
   return (
-    <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+    <StaggerGrid className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
       {list.map((a) => (
         <ActivityCard key={a.id} activity={a} />
       ))}
-    </div>
+    </StaggerGrid>
   );
 }
