@@ -1,4 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
+import { motion, useScroll, useTransform, useReducedMotion } from "framer-motion";
 import heroImg from "@/assets/hero-chefchaouen.jpg";
 import { FilterBar } from "@/components/FilterBar";
 import { MoodPicker } from "@/components/MoodPicker";
@@ -38,11 +39,19 @@ function HomePage() {
     ? `${cityName} — découvrez la ville`
     : "Chefchaouen au coucher du soleil";
 
+  const reduce = useReducedMotion();
+  const { scrollY } = useScroll();
+  const heroY = useTransform(scrollY, [0, 600], [0, 140]);
+  const heroScale = useTransform(scrollY, [0, 600], [1, 1.08]);
+
   return (
     <div>
       {/* Hero */}
       <section className="relative overflow-hidden">
-        <div className="absolute inset-0">
+        <motion.div
+          style={reduce ? undefined : { y: heroY, scale: heroScale }}
+          className="absolute inset-0 will-change-transform"
+        >
           <img
             src={heroSrc}
             alt={heroAlt}
@@ -51,46 +60,71 @@ function HomePage() {
             className="h-full w-full object-cover"
           />
           <div className="absolute inset-0 bg-gradient-to-br from-primary/80 via-zellige/50 to-foreground/80" />
-        </div>
+        </motion.div>
 
         <div className="relative mx-auto max-w-7xl px-4 py-20 md:px-8 md:py-32">
-          <div className="max-w-3xl text-primary-foreground animate-float-up">
-            <span className="inline-flex items-center gap-2 rounded-full border border-white/30 bg-white/10 px-4 py-1.5 text-xs font-medium backdrop-blur">
+          <motion.div
+            initial={reduce ? false : { opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
+            className="max-w-3xl text-primary-foreground"
+          >
+            <motion.span
+              initial={reduce ? false : { opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.05 }}
+              className="inline-flex items-center gap-2 rounded-full border border-white/30 bg-white/10 px-4 py-1.5 text-xs font-medium backdrop-blur"
+            >
               {cityName ? (
                 <><MapPin className="h-3.5 w-3.5" /> Vous explorez {cityName}</>
               ) : (
                 <><Sparkles className="h-3.5 w-3.5" /> Super-app marocaine des loisirs</>
               )}
-            </span>
-            <h1 className="mt-6 font-display text-5xl font-bold leading-[1.05] tracking-tight md:text-7xl text-balance">
+            </motion.span>
+            <motion.h1
+              initial={reduce ? false : { opacity: 0, y: 24 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.15, ease: [0.22, 1, 0.36, 1] }}
+              className="mt-6 font-display text-5xl font-bold leading-[1.05] tracking-tight md:text-7xl text-balance"
+            >
               {cityName ? (
                 <>{cityName} se vit.<br /><span className="italic text-saffron">Réservez l'instant.</span></>
               ) : (
                 <>Le Maroc se vit.<br /><span className="italic text-saffron">Réservez l'instant.</span></>
               )}
-            </h1>
-            <p className="mt-6 max-w-xl text-lg text-white/90 md:text-xl">
+            </motion.h1>
+            <motion.p
+              initial={reduce ? false : { opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.7, delay: 0.3 }}
+              className="mt-6 max-w-xl text-lg text-white/90 md:text-xl"
+            >
               {cityName
                 ? `Découvrez les expériences locales de ${cityName} — recommandées en temps réel selon votre humeur, la météo et votre position.`
                 : "De Chefchaouen aux dunes de Merzouga : découvrez +50 expériences locales, recommandées en temps réel selon votre humeur, la météo et votre position."}
-            </p>
-            <div className="mt-8 flex flex-wrap gap-3">
+            </motion.p>
+            <motion.div
+              initial={reduce ? false : { opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.7, delay: 0.45 }}
+              className="mt-8 flex flex-wrap gap-3"
+            >
               <Link
                 to="/activities"
-                className="inline-flex items-center gap-2 rounded-full bg-saffron px-6 py-3 font-semibold text-foreground shadow-elegant transition hover:scale-105"
+                className="group inline-flex items-center gap-2 rounded-full bg-saffron px-6 py-3 font-semibold text-foreground shadow-elegant transition-all duration-300 hover:scale-[1.04] hover:shadow-glow"
               >
-                Explorer les activités <ArrowRight className="h-4 w-4" />
+                Explorer les activités <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
               </Link>
               {!isPartner && (
                 <Link
                   to="/partner"
-                  className="inline-flex items-center gap-2 rounded-full border border-white/40 bg-white/10 px-6 py-3 font-semibold text-white backdrop-blur transition hover:bg-white/20"
+                  className="inline-flex items-center gap-2 rounded-full border border-white/40 bg-white/10 px-6 py-3 font-semibold text-white backdrop-blur transition-all duration-300 hover:scale-[1.04] hover:bg-white/20"
                 >
                   Je suis prestataire
                 </Link>
               )}
-            </div>
-          </div>
+            </motion.div>
+          </motion.div>
         </div>
       </section>
 
