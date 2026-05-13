@@ -209,8 +209,15 @@ export function Header() {
                 </span>
                 <ChevronDown className="hidden h-3.5 w-3.5 md:inline" />
               </button>
+              <AnimatePresence>
               {userMenu && (
-                <div className="absolute right-0 top-full z-50 mt-2 w-64 overflow-hidden rounded-2xl border border-border bg-popover shadow-elegant">
+                <motion.div
+                  initial={{ opacity: 0, y: -8, scale: 0.98 }}
+                  animate={{ opacity: 1, y: 0, scale: 1 }}
+                  exit={{ opacity: 0, y: -8, scale: 0.98 }}
+                  transition={{ duration: 0.18, ease: [0.22, 1, 0.36, 1] }}
+                  className="absolute right-0 top-full z-50 mt-2 w-64 overflow-hidden rounded-2xl border border-border bg-popover shadow-elegant"
+                >
                   <div className="border-b border-border bg-secondary/40 px-4 py-3">
                     <div className="text-xs text-muted-foreground">Connecté en tant que</div>
                     <div className="truncate text-sm font-semibold">{user.email}</div>
